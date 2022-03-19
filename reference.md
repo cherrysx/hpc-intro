@@ -1,47 +1,32 @@
 ---
 layout: reference
 permalink: /reference/
-title: Knowledge Base
+title: 基础知识
 ---
 
-### Quick Reference or "Cheat Sheets" for Queuing System Commands
+### 作业调度系统参考
 
-Search online for the one that fits you best, but here's some to start:
+在线搜索最适合您的，但这里有一些供参考：
 
-* [Slurm summary](https://slurm.schedmd.com/pdfs/summary.pdf) from SchedMD
-* [Torque/PBS summary](
-  https://gif.biotech.iastate.edu/torque-pbs-job-management-cheat-sheet)
-  from Iowa State
-* [Translating between Slurm and PBS](
-  https://www.msi.umn.edu/slurm/pbs-conversion) from University of Minnesota
+* [Slurm](https://slurm.schedmd.com/pdfs/summary.pdf)，开源软件
+* [OpenPBS](https://www.openpbs.org/)，开源软件
+* [Slurm和PBS区别](https://www.msi.umn.edu/slurm/pbs-conversion)
+* [LSF](https://www.ibm.com/docs/en/spectrum-lsf/10.1.0?topic=overview-lsf-introduction), 商业软件
 
-### Units and Language
+### 单位和语言
 
-A computer's memory and disk are measured in units called *Bytes* (one Byte is
-8 bits). As today's files and memory have grown to be large given historic
-standards, volumes are noted using the
-[SI](https://en.wikipedia.org/wiki/International_System_of_Units) prefixes. So
-1000 Bytes is a Kilobyte (kB), 1000 Kilobytes is a Megabyte (MB), 1000
-Megabytes is a Gigabyte (GB), etc.
+计算机的内存和磁盘以称为 *Bytes* 的单位来衡量（一个字节是8位）。由于今天的文件和内存已经变得很大，鉴于历史
+标准，磁盘卷使用
+[SI](https://en.wikipedia.org/wiki/International_System_of_Units) 前缀来标记。 所以1000 字节是千字节 (kB)，1000 千字节是兆字节 (MB)，1000兆字节是千兆字节 (GB) 等。
 
-History and common language have however mixed this notation with a different
-meaning. When people say "Kilobyte", they mean 1024 Bytes instead. In that
-spirit, a Megabyte is 1024 Kilobytes.
+然而，历史上，人们使用不同的意思来标记这种符号。当人们说“千字节”时，他们的意思是 1024 字节。也就是说，一兆字节是1024千字节。
 
-To address this ambiguity, the [International System of Quantities](
-https://en.wikipedia.org/wiki/International_System_of_Quantities) standardizes
-the *binary* prefixes (with base of 2<sup>10</sup>=1024) by the prefixes Kibi
-(ki), Mebi (Mi), Gibi (Gi), etc. For more details, see
-[here](https://en.wikipedia.org/wiki/Binary_prefix).
+为了解决这种模糊性，[国际数量系统]（https://en.wikipedia.org/wiki/International_System_of_Quantities）制定标准：
+*binary* 前缀（基数为2<sup>10</sup>=1024）由前缀 Kibi(ki)、Mebi (Mi)、Gibi (Gi) 等。详情请参阅[这里]（https://en.wikipedia.org/wiki/Binary_prefix）。
 
-### "No such file or directory" or "symbol 0096" Errors
+### “没有这样的文件或目录”或“符号 0096”错误
 
-`scp` and `rsync` may throw a perplexing error about files that very much do
-exist. One source of these errors is copy-and-paste of command line arguments
-from Web browsers, where the double-dash string `--` is rendered as an em-dash
-character "&mdash;" (or en-dash "&ndash;", or horizontal bar `―`). For example,
-instead of showing the transfer rate in real time, the following command fails
-mysteriously.
+`scp` 和 `rsync` 可能会抛出一个令人费解的文件是否存在的错误。这些错误的一个来源是复制和粘贴来自Web浏览器命令行参数，其中双破折号字符串 `--` 呈现为 em-dash字符“&mdash;” （或短划线“&ndash;”，或单杠`―`）。 例如，而不是实时显示传输速率，以下命令神秘地失败了。
 
 ```
 {{ site.local.prompt }} rsync —progress my_precious_data.txt {{ site.remote.user }}@{{ site.remote.login }}

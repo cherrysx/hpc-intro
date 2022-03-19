@@ -81,16 +81,16 @@ episode_order:
 # "dc":  Data Carpentry
 # "lc":  Library Carpentry
 # "cp":  Carpentries (e.g., instructor traning)
-carpentry: "incubator"
+carpentry: "swc"
 
 # Overall title for pages.
-title: "Introduction to High-Performance Computing"
+title: "高性能计算（HPC）介绍"
 
 # Email address, no mailto:
-email: "team@carpentries.org"
+email: "280056663@qq.com"
 
 # Life cycle stage of the lesson ("pre-alpha", "alpha", "beta", "stable")?
-life_cycle: "alpha"
+life_cycle: "stable"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).

@@ -5,42 +5,30 @@ root: .
 
 {% include gh_variables.html %}
 
-This workshop is an introduction to using high-performance computing systems
-effectively. We can't cover every case or give an exhaustive course on parallel
-programming in just two days' teaching time. Instead, this workshop is intended
-to give students a good introduction and overview of the tools available and
-how to use them effectively.
+本课程介绍如何高效的使用高性能计算系统。目前我们无法涵盖所有案例或提供详尽的并行计算课程。但是，课程旨在给学生介绍一些好用的工具和如何有效地使用它们。
 
-> ## Prerequisites
+> ## 前提条件
 >
-> Command line experience is necessary for this lesson. We recommend the
-> participants to go through
-> [shell-novice](https://swcarpentry.github.io/shell-novice/), if new to the
-> command line (also known as terminal or shell).
+> 本课需要命令行经验。如果是命令行（也称为终端或shell）新手，我们推荐
+> 参与者学习[Shell小白入门](https://www.yuanmadesign.com/shell1/)。
 {: .prereq}
 
-By the end of this workshop, students will know how to:
+本次课程结束之后，学生将学到：
 
-* Identify problems a cluster can help solve
-* Use the UNIX shell (also known as terminal or command line) to operate a
-  computer, connect to a cluster, and write simple shell scripts.
-* Submit and manage jobs on a cluster using a scheduler, transfer files, and
-  use software through environment modules.
+* 确定集群可以帮助解决的问题
+* 使用 UNIX shell（也称为终端或命令行）来操作计算机，连接到集群，并编写简单的 shell 脚本。
+* 使用调度程序提交和管理集群上的作业、传输文件和通过环境modules使用软件。
 
-> ## Getting Started
+> ## 开始
 >
-> To get started, follow the directions in the "[Setup](
-> {{ page.root }}/setup.html)" tab to download data to your computer and follow
-> any installation instructions.
+> 要开始使用，请按照“[准备事项]({{ page.root }}/setup.html)”中的内容将数据下载到您的计算机并按照说明安装。
 {: .callout}
 
-Note that this is the draft HPC Carpentry release. Comments and feedback are
-welcome.
+欢迎您的评论和反馈。
 
-> ## For Instructors
+> ## 对于教师
 >
-> If you are teaching this lesson in a workshop, please see the
-> [Instructor notes](guide/).
+> 如果您在课上教授本课，请参阅[讲师笔记](guide/)。
 {: .callout}
 
 {% include links.md %}
