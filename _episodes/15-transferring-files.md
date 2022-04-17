@@ -1,33 +1,24 @@
 ---
-title: "Transferring files with remote computers"
+title: "与远程计算机传输文件"
 teaching: 15
 exercises: 15
 questions:
-- "How do I transfer files to (and from) the cluster?"
+- "如何将文件传输到（和从）集群？"
 objectives:
-- "Be able to transfer files to and from a computing cluster."
+- "能够将文件传入和传出计算集群。"
 keypoints:
-- "`wget` and `curl -O` download a file from the internet."
-- "`scp` transfer files to and from your computer."
-- "You can use an SFTP client like FileZilla to transfer files through a GUI."
+- "`wget` 和 `curl -O` 从Internet下载文件。"
+- "`scp`将文件传输到您的计算机或从您的计算机传输文件。"
+- "您可以使用 FileZilla 等SFTP客户端通过GUI传输文件。"
 ---
 
-Computing with a remote computer offers very limited use if we cannot get files
-to or from the cluster. There are several options for transferring data between
-computing resources, from command line options to GUI programs, which we will
-cover here.
+如果我们无法将文件传入或传出集群，则使用远程计算机进行计算的用途非常有限。在计算资源之间传输数据有多种选择，从命令行选项到GUI程序，我们将在这里介绍。
 
-## Download Files From the Internet
+## 从Internet下载文件
 
-One of the most straightforward ways to download files is to use either `curl`
-or `wget`, one of these is usually installed in most Linux shells, on Mac OS
-terminal and in GitBash. Any file that can be downloaded in your web browser 
-through a direct link can be downloaded using `curl -O` or `wget`. This is a 
-quick way to download datasets or source code. 
+下载文件最直接的方法之一是使用“curl”或“wget”，其中一种通常安装在大多数Linux shell、Mac OS 终端和Git Bash中。任何可以通过直接链接在Web浏览器中下载的文件都可以使用`curl -O`或`wget`下载。这是下载数据集或源代码的快速方法。
 
-The syntax for these commands is: `curl -O https://some/link/to/a/file` 
-and `wget https://some/link/to/a/file`. Try it out by downloading
-some material we'll use later on, from a terminal on your local machine.
+这些命令的语法是：`curl -O https://some/link/to/a/file` 和 `wget https://some/link/to/a/file`。通过从本地计算机上的终端下载，我们稍后将使用的一些材料来尝试一下。
 
 ```
 {{ site.local.prompt }} curl -O {{ site.url }}{{ site.baseurl }}/files/hpc-intro-data.tar.gz
@@ -42,46 +33,39 @@ or
 
 > ## `tar.gz`?
 >
-> This is an archive file format, just like `.zip`, commonly used and supported
-> by default on Linux, which is the operating system the majority of HPC
-> cluster machines run. You may also see the extension `.tgz`, which is exactly
-> the same. We'll talk more about "tarballs," since "tar-dot-g-z" is a
-> mouthful, later on.
+> 这是一种存档文件格式，就像`.zip`，在Linux上常用并默认支持，Linux是大多数HPC集群机器运行的操作系统。您可能还会看到扩展名 `.tgz`，它完全相同。稍后，我们将更多地讨论“tar”，因为“tar-dot-g-z”是拗口的，
 {: .discussion}
 
-## Transferring Single Files and Folders With `scp`
+## 使用`scp`传输单个文件和文件夹
 
-To copy a single file to or from the cluster, we can use `scp` ("secure copy").
-The syntax can be a little complex for new users, but we'll break it down.
+要将单个文件复制到集群或从集群下载，我们可以使用`scp`（“安全复制”）。对于新用户来说，语法可能有点复杂，但我们将对其进行分解。
 
-To *upload to* another computer:
+要*上传到*另一台计算机：
 
 ```
 {{ site.local.prompt }} scp path/to/local/file.txt {{ site.remote.user }}@{{ site.remote.login }}:/path/on/{{ site.remote.name }}
 ```
 {: .language-bash}
 
-To *download from* another computer:
+要*从*另一台计算机下载：
 
 ```
 {{ site.local.prompt }} scp {{ site.remote.user }}@{{ site.remote.login }}:/path/on/{{ site.remote.name }}/file.txt path/to/local/
 ```
 {: .language-bash}
 
-Note that everything after the `:` is relative to our home directory on the
-remote computer. We can leave it at that if we don't care where the file goes.
+请注意，`:` 之后的所有内容都相对于远程计算机上的主目录。如果我们不关心文件的去向，我们可以将其保留。
 
 ```
 {{ site.local.prompt }} scp local-file.txt {{ site.remote.user }}@{{ site.remote.login }}:
 ```
 {: .language-bash}
 
-> ## Upload a File
+> ## 上传一个文件
 >
-> Copy the file you just downloaded from the Internet to your home directory on
-> {{ site.remote.name }}.
+> 将您刚刚从Internet下载的文件复制到{{ site.remote.name }}上的主目录。
 >
-> > ## Solution
+> > ## 解决方案
 > >
 > > ```
 > > {{ site.local.prompt }} scp hpc-intro-data.tar.gz {{ site.remote.user }}@{{ site.remote.login }}:~/
@@ -90,23 +74,17 @@ remote computer. We can leave it at that if we don't care where the file goes.
 > {: .solution}
 {: .challenge}
 
-> ## Why Not Download on {{ site.remote.name }} Directly?
+> ## 为什么不直接在{{ site.remote.name }}上下载？
 >
-> Some computer clusters are behind firewalls set to only allow transfers
-> initiated from the *outside*. This means that the `curl` command will fail,
-> as an address outside the firewall is unreachable from the inside. To get
-> around this, run the `curl` or `wget` command from your local machine to 
-> download the file, then use the `scp` command (just below here) to upload
-> it to the cluster.
+> 一些计算机集群位于防火墙后面，设置为只允许从*外部*发起的传输。这意味着“curl”命令将失败，因为防火墙外部的地址无法从内部访问。要解决这个问题，请从本地计算机运行`curl`或`wget`命令下载互联网文件，然后使用`scp`命令（就在此处下方）将其上传到集群。
 >
 > > ## `curl -O` from {{ site.remote.login }}
 > > or
 > > ## `wget` from {{ site.remote.login }}
 > > 
-> > Try downloading the file directly. Note that it may well fail, and that's
-> > OK!
+> > 尝试直接下载文件。请注意，它很可能会失败，这没关系！
 > >
-> > > ## Commands
+> > > ## 命令
 > > >
 > > > ```
 > > > {{ site.local.prompt }} ssh {{ site.remote.user }}@{{ site.remote.login }}
@@ -117,85 +95,55 @@ remote computer. We can leave it at that if we don't care where the file goes.
 > > > {: .language-bash}
 > > {: .solution}
 > >
-> > Did it work? If not, what does the terminal output tell you about what
-> > happened?
+> > 它奏效了吗？如果不是，终端输出告诉你发生了什么？
 > {: .challenge}
 {: .discussion}
 
-To copy a whole directory, we add the `-r` flag, for "**r**ecursive": copy the
-item specified, and every item below it, and every item below those... until it
-reaches the bottom of the directory tree rooted at the folder name you
-provided.
+要复制整个目录，我们添加 `-r` 命令行选项，用于“**r**ecursive”：复制指定的项目，以及它下面的每个项目，以及它们下面的每个项目......直到它到达底部 以您提供的文件夹名称为根的目录树。
 
 ```
 {{ site.local.prompt }} scp -r some-local-folder {{ site.remote.user }}@{{ site.remote.login }}:target-directory/
 ```
 {: .language-bash}
 
-> ## Caution
+> ## 警告
 >
-> For a large directory -- either in size or number of files --
-> copying with `-r` can take a long time to complete.
+> 对于一个大目录——无论是大小还是文件数量——使用 `-r` 复制可能需要很长时间才能完成。
 {: .callout}
 
-## What's in a `/`?
+## `/` 中有什么？
 
-When using `scp`, you may have noticed that a `:` *always* follows the remote
-computer name; sometimes a `/` follows that, and sometimes not, and sometimes
-there's a final `/`. On Linux computers, `/` is the ***root*** directory, the
-location where the entire filesystem (and others attached to it) is anchored. A
-path starting with a `/` is called *absolute*, since there can be nothing above
-the root `/`. A path that does not start with `/` is called *relative*, since
-it is not anchored to the root.
+使用`scp`时，您可能已经注意到`:` *always*跟在远程计算机名称后面； 有时后面是`/`，有时不是，有时是最后的`/`。在 Linux 计算机上，`/` 是 ***root*** 目录，是整个文件系统（以及附加到它的其他文件系统）的目录位置。 以 `/` 开头的路径称为*absolute*，因为在根`/`之上不能有任何东西。不以`/`开头的路径称为 *relative*，因为它没有根目录前缀。
 
-If you want to upload a file to a location inside your home directory --
-which is often the case -- then you don't need a leading `/`. After the
-`:`, start writing the sequence of folders that lead to the final storage
-location for the file or, as mentioned above, provide nothing if your home
-directory *is* the destination.
+如果您想将文件上传到您的主目录中的某个位置（通常是这种情况），那么您不需要`/`。在 `:` 之后，开始写入指向文件最终存储位置的文件夹序列，或者，如上所述，如果您的主目录*是*目标，则不提供任何内容。
 
-A trailing slash on the target directory is optional, and has no effect for
-`scp -r`, but is important in other commands, like `rsync`.
+目标目录的尾部斜杠是可选的，对`scp -r`没有影响，但在其他命令中很重要，例如`rsync`。
 
-> ## A Note on `rsync`
+> ## 关于`rsync`的注意事项
 >
-> As you gain experience with transferring files, you may find the `scp`
-> command limiting. The [rsync](https://rsync.samba.org/) utility provides
-> advanced features for file transfer and is typically faster compared to both
-> `scp` and `sftp` (see below). It is especially useful for transferring large
-> and/or many files and creating synced backup folders.
+> 随着您获得传输文件的经验，您可能会发现`scp`命令的限制。 [rsync](https://rsync.samba.org/) 实用程序为文件传输提供了高级功能，并且与 `scp`和`sftp`相比通常更快（见下文）。它对于传输大型和/或许多文件以及创建同步备份文件夹特别有用。
 >
-> The syntax is similar to `scp`. To transfer *to* another computer with
-> commonly used options:
+> 语法类似于`scp`。使用常用选项传输*到*另一台计算机：
 >
 > ```
 > {{ site.local.prompt }} rsync -avzP path/to/local/file.txt {{ site.remote.user }}@{{ site.remote.login }}:directory/path/on/{{ site.remote.name }}/
 > ```
 > {: .language-bash}
 >
-> The `a` (archive) option preserves file timestamps and permissions among
-> other things; the `v` (verbose) option gives verbose output to help monitor
-> the transfer; the `z` (compression) option compresses the file during transit
-> to reduce size and transfer time; and the `P` (partial/progress) option
-> preserves partially transferred files in case of an interruption and also
-> displays the progress of the transfer.
+> `a`（存档）选项保留文件时间戳和权限等；`v`（详细）选项提供详细输出以帮助监控传输；`z`（压缩）选项在传输过程中压缩文件以减小大小和传输时间； 并且`P`（部分/进度）选项在中断的情况下保留部分传输的文件，并显示传输进度。
 >
-> To recursively copy a directory, we can use the same options:
+> 要递归复制目录，我们可以使用相同的选项：
 >
 > ```
 > {{ site.local.prompt }} rsync -avzP path/to/local/dir {{ site.remote.user }}@{{ site.remote.login }}:directory/path/on/{{ site.remote.name }}/
 > ```
 > {: .language-bash}
 >
-> As written, this will place the local directory and its contents under the
-> specified directory on the remote system. If the trailing slash is omitted on
-> the destination, a new directory corresponding to the transferred directory
-> ('dir' in the example) will not be created, and the contents of the source
-> directory will be copied directly into the destination directory.
+> 如所写，这会将本地目录及其内容放在远程系统上的指定目录下。如果目标上的尾部斜杠被省略，则不会创建与传输目录对应的新目录（示例中为“dir”），源目录的内容将直接复制到目标目录中。
 >
-> The `a` (archive) option implies recursion.
+> `a`（归档）选项意味着递归。
 >
-> To download a file, we simply change the source and destination:
+> 要下载文件，我们只需更改源和目标：
 >
 > ```
 > {{ site.local.prompt }} rsync -avzP {{ site.remote.user }}@{{ site.remote.login }}:path/on/{{ site.remote.name }}/file.txt path/to/local/
@@ -203,25 +151,20 @@ A trailing slash on the target directory is optional, and has no effect for
 > {: .language-bash}
 {: .callout}
 
-> ## A Note on Ports
+> ## 关于端口的说明
 >
-> All file transfers using the above methods use SSH to encrypt data sent
-> through the network. So, if you can connect via SSH, you will be able to
-> transfer files. By default, SSH uses network port 22. If a custom SSH port is
-> in use, you will have to specify it using the appropriate flag, often `-p`,
-> `-P`, or `--port`. Check `--help` or the `man` page if you're unsure.
+> 使用上述方法的所有文件传输都使用SSH对通过网络发送的数据进行加密。因此，如果您可以通过SSH连接，您将能够传输文件。默认情况下，SSH使用网络端口22。如果正在使用自定义SSH端口，则必须使用适当的命令行选项来指定它，通常是`-p`、`-P`或`--port`。如果不确定，请检查 `--help` 或 `man` 页面。
 >
-> > ## Rsync Port
+> > ## Rsync端口
 > >
-> > Say we have to connect `rsync` through port 768 instead of 22. How would we
-> > modify this command?
+> > 假设我们必须通过端口768而不是22连接“rsync”。我们将如何修改此命令？
 > >
 > > ```
 > > {{ site.local.prompt }} rsync test.txt {{ site.remote.user }}@{{ site.remote.login }}:
 > > ```
 > > {: .language-bash}
 > >
-> > > ## Solution
+> > > ## 解决方案
 > > >
 > > > ```
 > > > {{ site.local.prompt }} rsync --help | grep port
@@ -234,64 +177,32 @@ A trailing slash on the target directory is optional, and has no effect for
 > {: .challenge}
 {: .callout}
 
-## Transferring Files Interactively with FileZilla
+## 使用 FileZilla 交互式传输文件
 
-FileZilla is a cross-platform client for downloading and uploading files to and
-from a remote computer. It is absolutely fool-proof and always works quite
-well. It uses the `sftp` protocol. You can read more about using the `sftp`
-protocol in the command line [here]({{ site.baseurl }}{% link
-_extras/discuss.md %}).
+FileZilla是一个跨平台客户端，用于从远程计算机下载和上传文件。它的功能和性能良好。它使用 `sftp` 协议。您可以在[此处]({{ site.baseurl }}{% link _extras/discuss.md %})中阅读有关使用`sftp`协议的更多信息。
 
-Download and install the FileZilla client from
-[https://filezilla-project.org](https://filezilla-project.org). After
-installing and opening the program, you should end up with a window with a file
-browser of your local system on the left hand side of the screen. When you
-connect to the cluster, your cluster files will appear on the right hand side.
+从[https://filezilla-project.org](https://filezilla-project.org)下载并安装FileZilla客户端。安装并打开程序后，您应该会在屏幕左侧看到一个带有本地系统文件浏览器的窗口。当您连接到集群时，您的集群文件将出现在右侧。
 
-To connect to the cluster, we'll just need to enter our credentials at the top
-of the screen:
+要连接到集群，我们只需要在屏幕顶部输入我们的凭据：
 
-* Host: `sftp://{{ site.remote.login }}`
-* User: Your cluster username
-* Password: Your cluster password
-* Port: (leave blank to use the default port)
+* 机器名/IP: `sftp://{{ site.remote.login }}`
+* 用户名: 您的集群用户名
+* 密码：您的集群密码
+* 端口：（留空以使用默认端口）
 
-Hit "Quickconnect" to connect. You should see your remote files appear on the
-right hand side of the screen. You can drag-and-drop files between the left
-(local) and right (remote) sides of the screen to transfer files.
+点击“快速连接”进行连接。您应该会看到您的远程文件出现在屏幕的右侧。您可以在屏幕的左侧（本地）和右侧（远程）之间拖放文件以传输文件。
 
-Finally, if you need to move large files (typically larger than a gigabyte)
-from one remote computer to another remote computer, SSH in to the computer
-hosting the files and use `scp` or `rsync` to transfer over to the other. This
-will be more efficient than using FileZilla (or related applications) that
-would copy from the source to your local machine, then to the destination
-machine.
+最后，如果您需要将大文件（通常大于1GB）从一台远程计算机移动到另一台远程计算机，请通过SSH连接到托管文件的计算机并使用`scp`或`rsync`传输到另一台计算机。这将比使用从源文件复制到本地计算机，然后复制到目标计算机的FileZilla（或相关应用程序）更有效。
 
-## Archiving Files
+## 归档文件
 
-One of the biggest challenges we often face when transferring data between
-remote HPC systems is that of large numbers of files. There is an overhead to
-transferring each individual file and when we are transferring large numbers of
-files these overheads combine to slow down our transfers to a large degree.
+在远程HPC系统之间传输数据时，我们经常面临的最大挑战之一是大量文件。传输每个单独的文件都会产生开销，当我们传输大量文件时，这些开销会在很大程度上减慢我们的传输速度。
 
-The solution to this problem is to *archive* multiple files into smaller
-numbers of larger files before we transfer the data to improve our transfer
-efficiency. Sometimes we will combine archiving with *compression* to reduce
-the amount of data we have to transfer and so speed up the transfer.
+这个问题的解决方案是在我们传输数据之前将多个文件*归档*成较小数量的较大文件，以提高我们的传输效率。有时我们会将归档与*压缩*结合起来，以减少我们必须传输的数据量，从而加快传输速度。
 
-The most common archiving command you will use on a (Linux) HPC cluster is
-`tar`. `tar` can be used to combine files into a single archive file and,
-optionally, compress it.
+您将在(Linux)HPC集群上使用的最常见的归档命令是`tar`。`tar`可用于将文件组合成单个存档文件，并且可以选择压缩它。
 
-Let's start with the file we downloaded from the lesson site,
-`hpc-lesson-data.tar.gz`. The "gz" part stands for *gzip*, which is a
-compression library. Reading this file name, it appears somebody took a folder
-named "hpc-lesson-data," wrapped up all its contents in a single file with
-`tar`, then compressed that archive with `gzip` to save space. Let's check
-using `tar` with the `-t` flag, which prints the "**t**able of contents"
-without unpacking the file, specified by `-f <filename>`, on the remote
-computer. Note that you can concatenate the two flags, instead of writing
-`-t -f` separately.
+让我们从从本课的站点下载的文件“hpc-lesson-data.tar.gz”开始。“gz”部分代表*gzip*，它是一个压缩库。读取这个文件名，似乎有人拿了一个名为“hpc-lesson-data”的文件夹，用“tar”将其所有内容打包在一个文件中，然后用“gzip”压缩该存档以节省空间。让我们检查使用带有`-t`命令行选项的 `tar`，它在远程计算机上打印“**t**able of contents”而不解包由`-f <filename>`指定的文件。请注意，您可以连接两个命令行选项，而不是单独编写 `-t -f`。
 
 ```
 {{ site.local.prompt }} ssh {{ site.remote.user }}@{{ site.remote.login }}
@@ -320,10 +231,7 @@ hpc-intro-data/north-pacific-gyre/NENE02040Z.txt
 ```
 {: .language-bash}
 
-This shows a folder containing another folder, which contains a bunch of files.
-If you've taken The Carpentries' Shell lesson recently, these might look
-familiar. Let's see about that compression, using `du` for "**d**isk
-**u**sage".
+这显示了一个包含另一个文件夹的文件夹，其中包含一堆文件。如果您最近学习过Linux Shell小白入门课，这些内容可能看起来很熟悉。让我们看看压缩情况，使用`du`表示“**d**isk **u**sage”。
 
 ```
 {{ site.remote.prompt }} du -sh hpc-lesson-data.tar.gz
@@ -331,29 +239,27 @@ familiar. Let's see about that compression, using `du` for "**d**isk
 ```
 {: .language-bash}
 
-> ## Files Occupy at Least One "Block"
+> ## 文件占用至少一个“块”
 >
-> If the filesystem block size is larger than 36 KB, you'll see a larger
-> number: files cannot be smaller than one block.
+> 如果文件系统块大小大于36KB，您会看到更大的数字：文件不能小于一个块。
 {: .callout}
 
-Now let's unpack the archive. We'll run `tar` with a few common flags:
+现在让我们解压缩存档。我们将使用一些常见的命令行选项运行`tar`：
 
-* `-x` to e**x**tract the archive
-* `-v` for **v**erbose output
-* `-z` for g**z**ip compression
-* `-f` for the file to be unpacked
+* `-x` 到e**x**tract归档
+* `-v` 用于**v**erbose输出
+* `-z` 用于g**z**ip压缩
+* `-f` 用于解压文件
 
-When it's done, check the directory size with `du` and compare.
+完成后，使用`du`检查目录大小并进行比较。
 
-> ## Extract the Archive
+> ## 提取档案
 >
-> Using the four flags above, unpack the lesson data using `tar`.
-> Then, check the size of the whole unpacked directory using `du`.
+> 使用上面的四个命令行选项，使用`tar`解压课程数据。然后，使用`du`检查整个解压目录的大小。
 >
-> Hint: `tar` lets you concatenate flags.
+> 提示：`tar`允许你连接这些命令行选项。
 >
-> > ## Commands
+> > ## 命令
 > >
 > > ```
 > > {{ site.remote.prompt }} tar -xvzf hpc-lesson-data.tar.gz
@@ -385,8 +291,7 @@ When it's done, check the directory size with `du` and compare.
 > > ```
 > > {: .output}
 > >
-> > Note that we did not type out `-x -v -z -f`, thanks to the flag
-> > concatenation, though the command works identically either way.
+> > 请注意，由于命令行选项连接，我们没有输入`-x -v -z -f`，尽管该命令的作业方式相同。
 > >
 > > ```
 > > {{ site.remote.prompt }} du -sh hpc-lesson-data
@@ -395,42 +300,30 @@ When it's done, check the directory size with `du` and compare.
 > > {: .language-bash}
 > {: .solution}
 >
-> > ## Was the Data Compressed?
+> > ## 数据是否被压缩？
 > >
-> > Text files compress nicely: the "tarball" is one-quarter the total size of
-> > the raw data!
+> > 文本文件压缩得很好：“tarball”是原始数据总大小的四分之一！
 > {: .discussion}
 {: .challenge}
 
-If you want to reverse the process -- compressing raw data instead of
-extracting it -- set a `c` flag instead of `x`, set the archive filename,
-then provide a directory to compress:
+如果你想反转这个过程——压缩原始数据而不是提取它——设置一个`c`命令行选项而不是`x`，设置存档文件名，然后提供一个目录来压缩：
 
 ```
 {{ site.local.prompt }} tar -cvzf compressed_data.tar.gz hpc-intro-data
 ```
 {: .language-bash}
 
-> ## Working with Windows
+> ## 使用Windows
 >
-> When you transfer text files to from a Windows system to a Unix system (Mac,
-> Linux, BSD, Solaris, etc.) this can cause problems. Windows encodes its files
-> slightly different than Unix, and adds an extra character to every line.
+> 当您将文本文件从Windows系统传输到Linux系统（Mac、Linux、BSD、Solaris 等）时，这可能会导致问题。Windows对其文件的编码与Linux略有不同，并在每一行添加一个额外的字符。
 >
-> On a Unix system, every line in a file ends with a `\n` (newline). On
-> Windows, every line in a file ends with a `\r\n` (carriage return + newline).
-> This causes problems sometimes.
+> 在Linux系统上，文件中的每一行都以 `\n`（换行符）结尾。在 Windows 上，文件中的每一行都以 `\r\n` 结尾（回车 + 换行）。这有时会导致问题。
 >
-> Though most modern programming languages and software handles this correctly,
-> in some rare instances, you may run into an issue. The solution is to convert
-> a file from Windows to Unix encoding with the `dos2unix` command.
+> 尽管大多数现代编程语言和软件都能正确处理此问题，但在极少数情况下，您可能会遇到问题。解决方案是使用`dos2Linux`命令将文件从Windows转换为Linux编码。
 >
-> You can identify if a file has Windows line endings with `cat -A filename`. A
-> file with Windows line endings will have `^M$` at the end of every line. A
-> file with Unix line endings will have `$` at the end of a line.
+> 您可以运行命令`cat -A 文件名`识别文件是否为Windows行结尾。带有Windows行尾的文件将在每行的末尾有`^M$`。具有Linux行尾的文件将在行尾有`$`。
 >
-> To convert the file, just run `dos2unix filename`. (Conversely, to convert
-> back to Windows format, you can run `unix2dos filename`.)
+> 要转换文件，只需运行`dos2Linux filename`。（相反，要转换回 Windows 格式，您可以运行 `Linux2dos filename`。）
 {: .callout}
 
 {% include links.md %}

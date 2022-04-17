@@ -1,135 +1,97 @@
 ---
 layout: page
-title: Setup
+title: 准备事项
 root: .
 ---
 
-There are several pieces of software you will wish to install before the
-workshop. Though installation help will be provided at the workshop, we
-recommend that these tools are installed (or at least downloaded) beforehand.
+在学习之前，您需要安装几款软件。
 
-1. [A terminal application or command-line interface](
+1. [终端应用程序或命令行界面](
    #where-to-type-commands-how-to-open-a-new-shell)
-2. [A Secure Shell application](#ssh-for-secure-connections)
+2. [ssh应用程序](#ssh-for-secure-connections)
 
-> ## Bash and SSH
+> ## Bash和SSH
 >
-> This lesson requires a terminal application (`bash`, `zsh`, or others) with
-> the ability to securely connect to a remote machine (`ssh`).
+> 本课需要一个终端应用程序（`bash`、`zsh` 或其他）能够安全地连接到远程机器（`ssh`）。
 {: .prereq}
 
-## Where to Type Commands: How to Open a New Shell
+## 在哪里键入命令：如何打开一个新的Shell
 
-The shell is a program that enables us to send commands to the computer and
-receive output. It is also referred to as the terminal or command line.
+Shell是一个程序，它使我们能够向计算机发送命令并接收输出。它也被称为终端或命令行。
 
-Some computers include a default Unix Shell program. The steps below describe
-some methods for identifying and opening a Unix Shell program if you already
-have one installed. There are also options for identifying and downloading a
-Unix Shell program, a Linux/UNIX emulator, or a program to access a Unix Shell
-on a server.
+某些计算机包含默认的Linux Shell程序。如果您已经安装了一个Linux Shell程序，下面的步骤描述了一些识别和打开Linux Shell程序的方法。还有用于识别和下载Linux Shell程序、Linux仿真器或访问服务器上的Linux Shell的程序的选项。
 
-### Unix Shells on Windows
+### Windows上的Linux Shell
 
-Computers with Windows operating systems do not automatically have a Unix Shell
-program installed. In this lesson, we encourage you to use an emulator included
-in Git for Windows, which gives you access to both Bash shell commands and Git.
-If you have attended a Software Carpentry workshop session, it is likely you
-have already received instructions on how to install Git for Windows.
+具有Windows 作系统的计算机不会自动安装Linux Shell程序。在本课中，我们鼓励您使用Git for Windows中包含的模拟器，它可以让您访问Bash shell命令和 Git。
 
-Once installed, you can open a terminal by running the program Git Bash from
-the Windows start menu.
+安装后，您可以通过从Windows开始菜单运行Git Bash程序来打开终端。
 
-#### Shell Programs for Windows
+#### 用于Window 的Shell程序
 
-* [Git for Windows][git4win] -- *Recommended*
-* [Windows Subsystem for Linux][ms-wsl] -- advanced option for Windows 10
+* [Git for Windows][git4win] -- *推荐*
+* [Windows Linux子系统][ms-wsl] -- Windows 10
 
-> ## Alternatives to Git for Windows
+> ## Windows版Git的替代品
 >
-> Other solutions are available for running Bash commands on Windows. There is
-> now a Bash shell command-line tool available for Windows 10. Additionally,
-> you can run Bash commands on a remote computer or server that already has a
-> Unix Shell, from your Windows machine. This can usually be done through a
-> Secure Shell (SSH) client. One such client available for free for Windows
-> computers is PuTTY. See the reference below for information on installing and
-> using PuTTY, using the Windows 10 command-line tool, or installing and using
-> a Unix/Linux emulator.
+> 其他解决方案可用于在Windows上运行Bash命令。现在有一个适用于Windows 10的Bash shell命令行工具。此外，您可以从您的Windows计算机在已经具有 Linux Shell的远程计算机或服务器上运行Bash命令。这通常可以通过 (SSH) 客户端来完成。 适用于 Windows 计算机的免费客户端之一是PuTTY。有关安装和使用PuTTY、使用Windows 10命令行工具或安装和使用Linux模拟器的信息，请参阅下面的参考资料。
 >
-> For advanced users, you may choose one of the following alternatives:
+> 对于高级用户，您可以选择以下选项之一：
 >
-> * Install the [Windows Subsystem for Linux][ms-wsl]
-> * Use the Windows [PowerShell][ms-shell]
-> * Read up on [Using a Unix/Linux emulator][unix-emulator] (Cygwin) or Secure
->   Shell (SSH) client (PuTTY)
+> * 安装 [Windows Linux子系统] [ms-wsl]
+> * 使用 Windows[PowerShell][ms-shell]
+> * 阅读[使用Linux模拟器][Linux 模拟器] (Cygwin) 或 Secure Shell (SSH) 客户端 (PuTTY)
 >
-> > ## Warning
+> > ## 警告
 > >
-> > Commands in the Windows Subsystem for Linux (WSL), PowerShell, or Cygwin
-> > may differ slightly from those shown in the lesson or presented in the
-> > workshop. Please ask if you encounter such a mismatch -- you're
-> > probably not alone.
+> > 适用于Linux的Windows子系统 (WSL)、PowerShell或Cygwin中的命令可能与课程中显示或研讨会中介绍的命令略有不同。请询问您是否遇到这种不匹配的情况。
 > {: .challenge}
 {: .discussion}
 
-### Unix Shell on macOS
+### macOS上的Linux Shell
 
-On macOS, the default Unix Shell is accessible by running the Terminal program
-from the `/Application/Utilities` folder in Finder.
+在macOS上，可以通过在Finde 的“/Application/Utilities”文件夹中运行终端程序来访问默认的Linux Shell。
 
-To open Terminal, try one or both of the following:
+要打开终端，请尝试以下一项或两项操作：
 
-* In Finder, select the Go menu, then select Utilities. Locate Terminal in the
-  Utilities folder and open it.
-* Use the Mac ‘Spotlight’ computer search function. Search for: `Terminal` and
-  press <kbd>Return</kbd>.
+* 在Finder中，选择前往菜单，然后选择实用程序。 在Utilities文件夹中找到终端并打开它。
+* 使用Mac的“Spotlight”电脑搜索功能。 搜索`Terminal`并按 <kbd>Return</kbd>。
 
-For an introduction, see [How to Use Terminal on a Mac][mac-terminal].
+有关介绍，请参阅[如何在 Mac 上使用终端][mac-terminal]。
 
-### Unix Shell on Linux
+### Linux上的Shell
 
-On most versions of Linux, the default Unix Shell is accessible by running the
-[(Gnome) Terminal](https://help.gnome.org/users/gnome-terminal/stable/) or
-[(KDE) Konsole](https://konsole.kde.org/) or
-[xterm](https://en.wikipedia.org/wiki/Xterm), which can be found via the
-applications menu or the search bar.
+在大多数Linux版本上，可以通过运行 [(Gnome) Terminal](https://help.gnome.org/users/gnome-terminal/stable/) 或 [(KDE) Konsole](https ://konsole.kde.org/) 或 [xterm](https://en.wikipedia.org/wiki/Xterm)，可以通过应用程序菜单或搜索栏找到。
 
-### Special Cases
+### 特别案例
 
-If none of the options above address your circumstances, try an online search
-for: `Unix shell [your operating system]`.
+如果以上选项都不能解决您的情况，请尝试在线搜索：`Linux shell [您的操作系统]`。
 
-## SSH for Secure Connections
+## 用于安全连接的SSH
 
-All students should have an SSH client installed. SSH is a tool that allows us
-to connect to and use a remote computer as our own.
+所有学生都应安装SSH客户端。SSH是一种工具，它允许我们连接到远程计算机并将其用作我们自己的计算机。
 
-### SSH for Windows
+### Windows SSH
 
-Git for Windows comes with SSH preinstalled: you do not have to do anything.
+Git for Windows 预装了SSH：您无需执行任何操作。
 
-> ## GUI Support for Windows
+> ## 对 Windows 的 GUI 支持
 >
-> If you know that the software you will be running on the cluster requires a
-> graphical user interface (a GUI window needs to open for the application to
-> run properly), please install [MobaXterm](https://mobaxterm.mobatek.net) Home
-> Edition.
+> 如果您知道您将在集群上运行的软件需要图形用户界面（需要打开一个 GUI 窗口才能使应用程序正常运行），请安装 [MobaXterm](https://mobaxterm.mobatek.net) 主页版。
 {: .discussion}
 
-### SSH for macOS
+### 适用于 macOS 的 SSH
 
-macOS comes with SSH pre-installed: you do not have to do anything.
+macOS 预装了 SSH：您无需执行任何操作。
 
-> ## GUI Support for macOS
+> ## 对 macOS 的 GUI 支持
 >
-> If you know that the software you will be running requires a graphical user
-> interface, please install [XQuartz](https://www.xquartz.org).
+> 如果您知道您将运行的软件需要图形用户界面，请安装 [XQuartz](https://www.xquartz.org)。
 {: .discussion}
 
-### SSH for Linux
+### Linux SSH
 
-Linux comes with SSH and X window support preinstalled: you do not have to do
-anything.
+Linux预装了SSH和X窗口支持：您无需执行任何操作。
 
 <!-- links -->
 [git4win]: https://gitforwindows.org/
@@ -137,5 +99,5 @@ anything.
 [ms-wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 [ms-shell]: https://docs.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core?view=powershell-7
 [mobax-gen]: https://mobaxterm.mobatek.net/documentation.html
-[unix-emulator]: https://faculty.smu.edu/reynolds/unixtut/windows.html
+[Linux-emulator]: https://faculty.smu.edu/reynolds/Linuxtut/windows.html
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10

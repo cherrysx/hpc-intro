@@ -1,57 +1,29 @@
 ---
-title: "Learner Profiles"
+title: "学习者画像"
 ---
 
-These profiles describe the potential learners that we anticipate as learners
-for this lesson. These can be used if you are deciding if this material is
-right for you or your students. If you plan to contribute material to this
-lesson, these will help you understand the target audience so that we can have
-a collaboratively developed, but cohesive lesson.
+这些画像属性描述了我们作为本课学习者所需潜质。如果您想判断本课内容是否符合某人，则可以使用这些。如果您打算为本课贡献材料，这些将帮助您了解目标受众，以便我们可以合作开发但有凝聚力的课程。
 
-## Tyra Crick
+## 泰拉克里克 -- 人名
 
-Tyra is an environmental biologist that uses DNA signatures obtained from soils
-to study species diversity in the environment. She needs to compare DNA
-sequences to large databases. So far, she has been able to use web-based tools
-for her limited datasets.
+泰拉克里克是一名环境生物学家，他使用从土壤中获得的DNA特征来研究环境中的物种多样性。她需要将DNA序列与大型数据库进行比较。到目前为止，她已经能够使用基于Web的工具去管理她有限的数据集。
 
-Recently, Tyra has started working with much larger datasets, and discovered
-that the online tool she uses has a limit of 50 entries on the online server.
-She has heard it should be possible to run the same tool through the command
-line, and managed to install it on her local Laptop. Now, however, it takes
-several days before each of the analyses are finished.
+最近，泰拉克里克开始使用更大的数据集，并发现她使用的在线服务器上的在线工具条目数限制为50。她听说应该可以通过命令行运行相同的工具，并设法将其安装在本地笔记本电脑上。然而，现在每个分析都需要几天时间才能完成。
 
-The workshop will teach Tyra to move her data to and from the university's
-computer cluster, and submit jobs using pre-installed software on the cluster.
-Afterwards, Tyra will be able to analyze her own data and pre-installed
-command-line based versions of the tool to spread the analysis over several
-dozen cores so it finishes in a few hours.
+该研讨会将教泰拉克里克将她的数据移入和移出计算机集群，并使用集群上预装的软件提交作业。之后，泰拉克里克将能够使用预先安装的基于命令行的工具分析她自己的数据，以便将分析分布在几十个内核上，从而在几个小时内完成。
 
-## Maria Newton
+## 玛丽亚·牛顿
 
-As a new PhD student, Maria is given a task to select parameters for their
-simulation. They need to run a set of calculations on several thousand
-combinations of parameters. One calculation takes several minutes. They set up
-the problem on their laptop but quickly realise that it would take more than a
-month to complete the task. They are told to use local HPC but they are not
-sure how this would help them.
+作为一名新的博士生，玛丽亚的任务是为他们的模拟选择参数。他们需要对数千种参数组合进行一组计算。一次计算需要几分钟。他们试图在笔记本电脑上解决该问题，但很快意识到完成任务需要一个多月的时间。他们被告知可以使用本地HPC集群，但他们不确定如何借助HPC集群解决问题。
 
-## Dana Fisher
+## 达纳费舍尔
 
-Dana wants to cross-validate a model for a statistics class project. This
-involves running the model 1000 times -- but each run takes an hour.
-Running the model on a laptop will take over a month!
+达纳费舍尔想要交叉验证一个统计类项目的模型。这涉及运行模型1000次——但每次运行需要一个小时。在笔记本电脑上运行模型需要一个多月的时间！
 
 ## Rina Watson
 
-Rina, a genomics researcher, has been using small datasets of sequence data,
-but soon will be receiving a new type of sequencing data that is 10 times as
-large. It's already challenging to open the datasets on a computer --
-analyzing these larger datasets will probably crash it.
+基因组学研究员Rina一直在使用小型序列数据集，但很快将接收到10倍大的新型测序数据。在计算机上打开数据集已经很困难了, 分析这些更大的数据集可能会导致它崩溃。
 
-## Lucy Navier-Stokes
+## 露西·纳维尔-斯托克斯
 
-Lucy is using a fluid dynamics package that has an option to run in parallel.
-So far, this option was not used on a desktop. In going from 2D to 3D
-simulations, the simulation time has more than tripled. It might be useful to
-take advantage of that parallel feature to speed things up.
+Lucy正在使用一个流体动力学包，该包可以选择并行运行。到目前为止，此选项未在桌面上使用。从2D模拟到3D模拟，模拟时间增加了两倍多。利用该并行功能来加快速度可能很有用。

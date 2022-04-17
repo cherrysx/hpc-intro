@@ -1,129 +1,81 @@
 ---
-title: "Working with the scheduler"
+title: "使用调度器"
 teaching: 45
 exercises: 30
 questions:
-- "What is a scheduler and why are they used?"
-- "How do I launch a program to run on any one node in the cluster?"
-- "How do I capture the output of a program that is run on a node in the
-  cluster?"
+- "什么是调度器，为什么要使用它们？"
+- "如何启动一个程序以在集群中的任何一个节点上运行？"
+- "如何捕获在集群中的节点上运行的程序的输出？"
 objectives:
-- "Run a simple Hello World style program on the cluster."
-- "Submit a simple Hello World style script to the cluster."
-- "Use the batch system command line tools to monitor the execution of your
-  job."
-- "Inspect the output and error files of your jobs."
+- "在集群上运行一个简单的Hello World风格的程序。"
+- "向集群提交一个简单的Hello World样式脚本。"
+- "使用批处理系统命令行工具来监视作业的执行。"
+- "检查作业的输出和错误文件。"
 keypoints:
-- "The scheduler handles how compute resources are shared between users."
-- "Everything you do should be run through the scheduler."
-- "A job is just a shell script."
-- "If in doubt, request more resources than you will need."
+- "调度器处理用户之间如何共享计算资源。"
+- "您所做的一切都应该通过调度器运行。"
+- "作业只是一个shell脚本。"
+- "如果有疑问，请请求比您需要的更多的资源。"
 ---
 
-## Job Scheduler
+## 作业调度器
 
-An HPC system might have thousands of nodes and thousands of users. How do we
-decide who gets what and when? How do we ensure that a task is run with the
-resources it needs? This job is handled by a special piece of software called
-the scheduler. On an HPC system, the scheduler manages which jobs run where and
-when.
+一个HPC系统可能有数千个节点和数千个用户。我们如何决定谁在什么时候得到什么？我们如何确保任务使用所需的资源运行？这项作业由称为调度器的特殊软件处理。在HPC系统上，调度器管理哪些作业在何时何地运行。
 
-The following illustration compares these tasks of a job scheduler to a waiter
-in a restaurant. If you can relate to an instance where you had to wait for a
-while in a queue to get in to a popular restaurant, then you may now understand
-why sometimes your job do not start instantly as in your laptop.
+下图将作业调度器的这些任务与餐厅的服务员进行了比较。如果你能想到一个你不得不排队等待一段时间才能进入一家受欢迎的餐厅的例子，那么你现在可能会理解为什么有时你的作业不像在笔记本电脑中那样立即开始。
 
 {% include figure.html max-width="75%" caption=""
-   file="/fig/restaurant_queue_manager.svg"
+   file="/hpc1/fig/restaurant_queue_manager.svg"
    alt="Compare a job scheduler to a waiter in a restaurant" %}
 
-> ## Job Scheduling Roleplay (Optional)
+> ## 作业调度角色扮演（可选）
 >
-> Your instructor will divide you into groups taking on different roles in the
-> cluster (users, compute nodes and the scheduler). Follow their instructions
-> as they lead you through this exercise. You will be emulating how a job
-> scheduling system works on the cluster.
+> 我们可以将扮演HPC系统中的不同角色，将您分成在集群中扮演不同角色的小组（用户、计算节点和调度器）。在下面的引导下您完成此练习时，请按照指示进行操作。您将模拟作业调度器在集群上的作业方式。
 >
-> > ## Instructions
+> > ## 指导
 > >
-> > To do this exercise, you will need about 50-100 pieces of paper or sticky
-> > notes.
+> > 要进行此练习，您将需要大约50-100张纸或便签。
 > >
-> > 1. Divide the room into groups, with specific roles.
-> >    * Pick three or four people to be the "scheduler."
-> >    * Select one-third of the room be "users", given several slips of paper
-> >      (or post-it notes) and pens.
-> >    * Have the remaining two thirds of the room be "compute nodes."
-> >    * Have the "users" go to the front of the room (or the back, wherever
-> >      there's space for them to stand) and the "schedulers" stand between
-> >      the users and "compute nodes" (who should remain at their seats).
+> > 1. 将房间分成具有特定角色的组。
+> >    * 挑三四个人做“调度员”。
+> >    * 选择房间的三分之一的人是“用户”，给定几张纸条（或便利贴）和笔。
+> >    * 让房间的剩余三分之二成为“计算节点”。
+> >    * 让“用户”走到房间的前面（或后面，只要有他们可以站立的地方），“调度员”站在用户和“计算节点”（应该留在他们的座位上）之间。
 > >
-> > 1. Divide the pieces of paper / sticky notes among the "users" and have
-> >    them fill out all the pages with simple math problems and their name.
-> >    Tell everyone that these are the jobs that need to be done and
-> >    correspond to their computing research problems.
+> > 1. 将纸/便签分给“用户”，让他们用简单的数学问题和他们的名字填写所有便签。告诉大家，这些都是需要完成的作业，对应他们的计算研究问题。
 > >
-> > 1. Point out that we now have jobs and we have "compute nodes" (the people
-> >    still sitting down) that can solve these problems. How are the jobs
-> >    going to get to the nodes? The answer is the scheduling program that
-> >    will take the jobs from the users and deliver them to open compute
-> >    nodes.
+> > 1. 我们现在有作业，我们有可以解决这些问题的“计算节点”（仍然坐着的人）。作业将如何到达节点？ 答案是调度器，它将从用户那里获取作业并将它们交付给开放的计算节点。
 > >
-> > 1. Have all the "compute nodes" raise their hands. Have the users "submit"
-> >    their jobs by handing them to the schedulers. Schedulers should then
-> >    deliver them to "open" (hands-raised) compute nodes and collect finished
-> >    problems and return them to the appropriate user.
+> > 1. 让所有“计算节点”举手。让用户通过将作业交给调度器来“提交”他们的作业。然后调度器应将它们交付给“开放”（举手）计算节点并收集完成的问题并将它们返回给适当的用户。
 > >
-> > 1. Wait until most of the problems are done and then re-seat everyone.
+> > 1. 等到大部分问题都解决了，然后重新安排每个人的座位。
 > >
-> > > ## Discussion
+> > > ## 讨论
 > > >
-> > > A "node" might be unable to solve the assigned problem for a variety of
-> > > reasons.
+> > > 由于各种原因，“节点”可能无法解决指定的问题。
 > > >
-> > > * Ran out of time.
-> > > * Ran out of memory.
-> > > * Ran out of storage space, or could not load an input file or dataset.
-> > > * Doesn't know where to start: nobody "taught" it, i.e., the program
-> > >   can't be loaded.
-> > > * Gets stuck on a hard part: the program has the wrong algorithm, or was
-> > >   never told to load the library containing the right algorithm.
-> > > * Was busy thinking about something else, and didn't get to the problem
-> > >   yet.
+> > > * 没时间了。
+> > > * 没内存了。
+> > > * 存储空间不足，或无法加载输入文件或数据集。
+> > > * 不知道从哪里开始：没有人“教”它，即无法加载程序。
+> > > * 卡在一个困难的部分：程序有错误的算法，或者从未被告知加载包含正确算法的库。
+> > > * 忙着别的事，还没解决问题。
 > > {: .discussion}
 > {: .challenge}
 {: .callout}
 
-The scheduler used in this lesson is {{ site.sched.name }}. Although
-{{ site.sched.name }} is not used everywhere, running jobs is quite similar
-regardless of what software is being used. The exact syntax might change, but
-the concepts remain the same.
+本课中使用的调度器是{{ site.sched.name }}。 尽管{{ site.sched.name }}并非在任何地方都使用，但无论使用什么软件，运行作业都非常相似。确切的语法可能会改变，但概念保持不变。
 
-## Running a Batch Job
+## 运行批处理作业
 
-The most basic use of the scheduler is to run a command non-interactively. Any
-command (or series of commands) that you want to run on the cluster is called a
-*job*, and the process of using a scheduler to run the job is called *batch job
-submission*.
+调度器最基本的用途是以非交互方式运行命令。您想在集群上运行的任何命令（或一系列命令）都称为*job*，使用调度器运行作业的过程称为*batch job submit*。
 
-In this case, the job we want to run is a shell script -- essentially a
-text file containing a list of UNIX commands to be executed in a sequential
-manner. Our shell script will have three parts:
+在这种情况下，我们要运行的作业是一个shell脚本——本质上是一个文本文件，其中包含要按顺序执行的Linux命令列表。 我们的shell脚本将包含三个部分：
 
-* On the very first line, add `{{ site.remote.bash_shebang }}`. The `#!`
-  (pronounced "hash-bang" or "shebang") tells the computer what program is
-  meant to process the contents of this file. In this case, we are telling it
-  that the commands that follow are written for the command-line shell (what
-  we've been doing everything in so far). If we wanted our script to be run
-  with something else -- Python, for example -- we could change this line to
-  read `#!/usr/bin/python3`.
-* Anywhere below the first line, we'll add an `echo` command with a friendly
-  greeting. When run, the shell script will print whatever comes after `echo`
-  in the terminal.
-  * `echo -n` will print everything that follows, *without* ending
-    the line by printing the new-line character.
-* On the last line, we'll invoke the `hostname` command, which will print the
-  name of the machine the script is run on.
+* 在第一行，添加 `{{ site.remote.bash_shebang }}`。`#!`（读作“hash-bang”或“shebang”）告诉计算机用什么程序来处理这个文件的内容。在这种情况下，我们告诉它后面的命令是为命令行shell编写的（到目前为止我们所做的一切）。 如果我们希望我们的脚本与其他东西一起运行——例如Python——我们可以将这一行更改为 `#!/usr/bin/python3`。
+* 在第一行下方的任何地方，我们将添加一个带有友好问候语的`echo`命令。 运行时，shell脚本将打印终端中`echo` 之后的任何内容。
+* `echo -n`将打印后面的所有内容，*而不*通过打印换行符结束行。
+* 在最后一行，我们将调用`hostname` 命令，该命令将打印运行脚本的机器的名称。
 
 ```
 {{ site.remote.prompt }} nano example-job.sh
@@ -137,7 +89,7 @@ hostname
 ```
 {: .output}
 
-Let's try running it:
+让我们尝试运行它：
 
 ```
 $ example-job.sh 
@@ -149,14 +101,7 @@ bash: example-job.sh: command not found...
 ```
 {: .error}
 
-Strangely enough, Bash can't find our script. As it turns out, Bash will only
-look in certain directories for scripts to run. To run anything else, we need
-to tell Bash exactly where to look. To run a script that we wrote ourselves, we
-need to tell Bash where it is explicitly, so it doesn't go searching. We could
-do this one of two ways: either with the absolute path 
-`{{ site.workshop_host_homedir }}/yourUserName/example-job.sh` (equivalently,
-`~/example-job.sh`), or with the relative path `./example-job.sh`
-(where "." stands for "the current working directory").
+奇怪的是，Bash找不到我们的脚本。事实证明，Bash只会在某些目录中查找要运行的脚本。要运行其他任何东西，我们需要告诉 Bash确切的位置。要运行我们自己编写的脚本，我们需要明确告诉Bash它在哪里，这样它就不会进行搜索。我们可以使用以下两种方法之一：使用绝对路径 `{{ site.workshop_host_homedir }}/yourUserName/example-job.sh`（等效于 `~/example-job.sh`），或者使用相对路径 `./example-job.sh`（其中“.”代表“当前作业目录”）。
 
 ```
 $ ./example-job.sh
@@ -168,9 +113,7 @@ bash: ./example-job.sh: Permission denied
 ```
 {: .error}
 
-There's one last thing we need to do. Before a file can be run, it needs
-"permission" to execute. Let's look at the permissions for every file in this
-directory using the "long" format option with `ls`:
+我们需要做的最后一件事。在文件可以运行之前，它需要“权限”才能执行。让我们使用 `ls` 的“long”格式选项查看此目录中每个文件的权限：
 
 ```
 $ ls -l
@@ -184,44 +127,29 @@ $ ls -l
 ```
 {: .output}
 
-Let's see if we can understand **what each field of a given row represents**,
-working left to right.
+让我们看看我们是否可以理解**给定行的每个字段代表的内容**，从左到右。
 
-1. **Permissions:** to the far left, there are 10 single-character columns with
-   some or all of the following symbols:
-   * `d` indicates whether something is a directory
-   * `r` indicates permission to **r**ead the file or directory
-   * `w` indicates permission to **w**rite to the file or directory
-   * `x` indicates permission to e**x**ecute the file or directory
-   * `-` is used where permission has not been granted.
+1. **Permissions:**在最左侧，有10个单字符列，其中包含以下部分或全部符号：
+   * `d` 表示某个东西是否是一个目录
+   * `r` 表示**r**读取文件或目录的权限
+   * `w` 表示对文件或目录的 **w**rite 权限
+   * `x` 表示权限 e**x**ecute 文件或目录
+   * `-` 用于未授予权限的情况。
 
-   There are three fields of `rwx` permissions following the spot for `d`:
+   在`d`的位置之后有 `rwx` 权限的三个字段：
   
-   * The first set of `rwx` are the permissions that the `u`ser who owns the
-     file has (in this case the owner is `yourUsername`).
-   * The second set of `rwx`s are permissions that other members of the owner's
-     `g`roup share (in this case, the group is named `yourGroup`); shorthand is `g`.
-   * The third set of `rwx`s are permissions that all `o`ther users can do with
-     a file.
-   * Although files are typically created with read permissions for
-     everyone, typically the permissions on your home directory prevent others
-     from being able to access the file in the first place.
-2. **References:** This counts the number of references ([hard links](
-   https://en.wikipedia.org/wiki/Hard_link)) to the item (file, folder,
-   symbolic link or "shortcut").
-3. **Owner:** This is the username of the user who owns the file. Their
-   permissions are indicated in the first permissions field.
-4. **Group:** This is the user group of the user who owns the file. Members of
-   this user group have permissions indicated in the second permissions field.
-5. **Size of item:** This is the number of bytes in a file, or the number of
-   [filesystem blocks](https://en.wikipedia.org/wiki/Block_(data_storage))
-   occupied by the contents of a folder. (We can use the `-h` option here to
-   get a human-readable file size in megabytes, gigabytes, etc.)
-6. **Time last modified:** This is the last time the file was modified.
-7. **Filename:** This is the filename.
+   * 第一组`rwx`是拥有文件的`u`ser 拥有的权限（在这种情况下，所有者是`yourUsername`）。
+   * 第二组`rwx`是所有者的组的其他成员共享的权限（在这种情况下，组名为`yourGroup`）； 短名是`g`。
+   * 第三组`rwx`是所有其他用户都可以对文件执行的权限。
+   * 尽管通常创建文件时每个人都具有读取权限，但通常您的主目录上的权限首先会阻止其他人访问该文件。
+2. **References:** 这会计算对文件、文件夹、符号链接或“快捷方式”的引用（[硬链接]（https://en.wikipedia.org/wiki/Hard_link））的数量。
+3. **Owner:** 这是拥有该文件的用户的用户名。他们的权限显示在第一个权限字段中。
+4. **Group:** 这是拥有该文件的用户的用户组。此用户组的成员具有第二个权限字段中指示的权限。
+5. **Size:** 这是文件中的字节数，或文件夹内容占用的[文件系统块]（https://en.wikipedia.org/wiki/Block_(data_storage)）的数量。（我们可以在这里使用 `-h` 选项来获得人类可读的文件大小，以兆字节、千兆字节等为单位）
+6. **Time last modified:** 这是最后一次修改文件的时间。
+7. **Filename:** 这是文件名。
 
-Changing permissions is done with `chmod`. To add executable permissions for
-our own **u**sername, we'll enter:
+更改权限是使用`chmod`完成的。要为我们自己的**username添加可执行权限，我们将输入：
 
 ```
 $ chmod u+x example-job.sh
@@ -235,11 +163,11 @@ $ ls -l example-job.sh
 {: .output}
 
 
-> ## Creating Our Test Job
+> ## 创建我们的测试作业
 >
-> Run the script. Does it execute on the cluster or just our login node?
+> 运行脚本。它是在集群上执行还是仅在我们的登录节点上执行？
 >
-> > ## Solution
+> > ## 解决方案
 > >
 > > ```
 > > {{ site.remote.prompt }} ./example-job.sh
@@ -250,14 +178,11 @@ $ ls -l example-job.sh
 > > ```
 > > {: .output}
 > >
-> > This job runs on the login node.
+> > 此作业在登录节点上运行。
 > {: .solution}
 {: .challenge}
 
-If you completed the previous challenge successfully, you probably realise that
-there is a distinction between running the job through the scheduler and just
-"running it". To submit this job to the scheduler, we use the
-`{{ site.sched.submit.name }}` command.
+如果您成功完成了上一个挑战，您可能会意识到通过调度器运行作业与仅“运行”它之间存在区别。要将此作业提交给调度器，我们使用`{{ site.sched.submit.name }}`命令。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.submit.name }} {% if site.sched.submit.options != '' %}{{ site.sched.submit.options }} {% endif %}example-job.sh
@@ -266,11 +191,7 @@ there is a distinction between running the job through the scheduler and just
 
 {% include {{ site.snippets }}/scheduler/basic-job-script.snip %}
 
-And that's all we need to do to submit a job. Our work is done -- now the
-scheduler takes over and tries to run the job for us. While the job is waiting
-to run, it goes into a list of jobs called the *queue*. To check on our job's
-status, we check the queue using the command
-`{{ site.sched.status }} {{ site.sched.flag.user }}`.
+这就是我们提交作业所需要做的一切。我们的作业已经完成——现在调度器接管并尝试为我们运行作业。当作业等待运行时，它会进入一个名为*queue*的作业列表。为了检查我们的作业状态，我们使用命令`{{ site.sched.status }} {{ site.sched.flag.user }}`检查队列。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.status }} {{ site.sched.flag.user }}
@@ -279,13 +200,7 @@ status, we check the queue using the command
 
 {% include {{ site.snippets }}/scheduler/basic-job-status.snip %}
 
-The best way to check our job's status is with `{{ site.sched.status }}`. Of
-course, running `{{ site.sched.status }}` repeatedly to check on things can be
-a little tiresome. To see a real-time view of our jobs, we can use the `watch`
-command. `watch` reruns a given command at 2-second intervals. This is too
-frequent, and will likely upset your system administrator. You can change the
-interval to a more reasonable value, for example 15 seconds, with the `-n 15`
-parameter. Let's try using it to monitor another job.
+检查我们的作业状态的最好方法是使用`{{ site.sched.status }}`。当然，反复运行`{{ site.sched.status }}`来检查事情可能会有点烦人。要查看我们作业的实时视图，我们可以使用`watch`命令。`watch`以2秒的间隔重新运行给定的命令。这太频繁了，可能会让您的系统管理员感到不安。您可以使用`-n 15`参数将时间间隔更改为更合理的值，例如15秒。让我们尝试使用它来监控另一个作业。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.submit.name }} {% if site.sched.submit.options != '' %}{{ site.sched.submit.options }} {% endif %}example-job.sh
@@ -293,40 +208,22 @@ parameter. Let's try using it to monitor another job.
 ```
 {: .language-bash}
 
-You should see an auto-updating display of your job's status. When it finishes,
-it will disappear from the queue. Press `Ctrl-c` when you want to stop the
-`watch` command.
+您应该会看到作业状态的自动更新显示。完成后，它将从队列中消失。当你想停止`watch`命令时按`Ctrl-c`。
 
-> ## Where's the Output?
+> ## 输出在哪里？
 >
-> On the login node, this script printed output to the terminal -- but
-> when we exit `watch`, there's nothing. Where'd it go?
+> 在登录节点上，这个脚本将输出打印到终端——但是当我们退出`watch`时，什么也没有。它去哪儿了？
 >
-> Cluster job output is typically redirected to a file in the directory you
-> launched it from. Use `ls` to find and read the file.
+> 集群作业输出通常重定向到您启动它的目录中的文件。使用`ls`查找和读取文件。
 {: .discussion}
 
-## Customising a Job
+## 自定义作业
 
-The job we just ran used all of the scheduler's default options. In a
-real-world scenario, that's probably not what we want. The default options
-represent a reasonable minimum. Chances are, we will need more cores, more
-memory, more time, among other special considerations. To get access to these
-resources we must customize our job script.
+我们刚刚运行的作业使用了调度器的所有默认选项。在现实世界的场景中，这可能不是我们想要的。默认选项代表一个合理的最小值。很有可能，我们将需要更多的内核、更多的内存、更多的时间，以及其他特殊考虑。要访问这些资源，我们必须自定义我们的作业脚本。
 
-Comments in UNIX shell scripts (denoted by `#`) are typically ignored, but
-there are exceptions. For instance the special `#!` comment at the beginning of
-scripts specifies what program should be used to run it (you'll typically see
-`{{ site.local.bash_shebang }}`). Schedulers like {{ site.sched.name }} also
-have a special comment used to denote special scheduler-specific options.
-Though these comments differ from scheduler to scheduler,
-{{ site.sched.name }}'s special comment is `{{ site.sched.comment }}`. Anything
-following the `{{ site.sched.comment }}` comment is interpreted as an
-instruction to the scheduler.
+Linux shell脚本中的注释（用`#`表示）通常会被忽略，但也有例外。例如，脚本开头的特殊`#!`注释指定了应该使用哪个程序来运行它（您通常会看到 `{{ site.local.bash_shebang }}`）。像{{ site.sched.name }}这样的调度器也有一个特殊的注释，用于表示特殊的调度器特定选项。尽管这些注释因调度器而异，但{{ site.sched.name }}的特殊注释是`{{ site.sched.comment }}`。`{{ site.sched.comment }}`注释后面的任何内容都被解释为对调度器的指令。
 
-Let's illustrate this by example. By default, a job's name is the name of the
-script, but the `{{ site.sched.flag.name }}` option can be used to change the
-name of a job. Add an option to the script:
+让我们通过例子来说明这一点。默认情况下，作业的名称是脚本的名称，但`{{ site.sched.flag.name }}`选项可用于更改作业的名称。向脚本添加一个选项：
 
 ```
 {{ site.remote.prompt }} cat example-job.sh
@@ -343,7 +240,7 @@ echo "This script has finished successfully."
 ```
 {: .output}
 
-Submit the job and monitor its status:
+提交作业并监控其状态：
 
 ```
 {{ site.remote.prompt }} {{ site.sched.submit.name }} {% if site.sched.submit.options != '' %}{{ site.sched.submit.options }} {% endif %}example-job.sh
@@ -353,22 +250,15 @@ Submit the job and monitor its status:
 
 {% include {{ site.snippets }}/scheduler/job-with-name-status.snip %}
 
-Fantastic, we've successfully changed the name of our job!
+太棒了，我们已经成功地更改了我们的作业名称！
 
-> ## Setting up Email Notifications
+> ## 设置电子邮件通知
 >
-> Jobs on an HPC system might run for days or even weeks. We probably have
-> better things to do than constantly check on the status of our job with
-> `{{ site.sched.status }}`. Looking at the manual page for
-> `{{ site.sched.submit.name }}`, can you set up our test job to send you an email
-> when it finishes?
+> HPC 系统上的作业可能会运行数天甚至数周。与使用`{{ site.sched.status }}`不断检查作业状态相比，我们可能有更好的事情要做。查看 `{{ site.sched.submit.name }}`的手册页，您能否设置我们的测试作业以在完成时向您发送电子邮件？
 >
-> > ## Hint
+> > ## 暗示
 > >
-> > You can use the *manual pages* for {{ site.sched.name }} utilities to find
-> > more about their capabilities. On the command line, these are accessed
-> > through the `man` utility: run `man <program-name>`. You can find the same
-> > information online by searching > "man <program-name>".
+> > 您可以使用{{ site.sched.name }}实用程序的*手册页* 来查找有关其功能的更多信息。在命令行上，这些可以通过`man`实用程序访问：运行`man <program-name>`。您可以通过搜索 > "man <program-name>"在线找到相同的信息。
 > >
 > > ```
 > > {{ site.remote.prompt }} man {{ site.sched.submit.name }}
@@ -377,35 +267,23 @@ Fantastic, we've successfully changed the name of our job!
 > {: .solution}
 {: .challenge}
 
-### Resource Requests
+### 资源请求
 
-But what about more important changes, such as the number of cores and memory
-for our jobs? One thing that is absolutely critical when working on an HPC
-system is specifying the resources required to run a job. This allows the
-scheduler to find the right time and place to schedule our job. If you do not
-specify requirements (such as the amount of time you need), you will likely be
-stuck with your site's default resources, which is probably not what you want.
+但是更重要的变化呢，比如我们作业的核心数量和内存？在HPC系统上作业时绝对关键的一件事是指定运行作业所需的资源。这允许调度器找到合适的时间和地点来安排我们的作业。如果您没有指定要求（例如您需要的时间量），您可能会被网站的默认资源卡住，这可能不是您想要的。
 
-The following are several key resource requests:
+以下是几个关键资源请求：
 
 {% include {{ site.snippets }}/scheduler/option-flags-list.snip %}
 
-Note that just *requesting* these resources does not make your job run faster,
-nor does it necessarily mean that you will consume all of these resources. It
-only means that these are made available to you. Your job may end up using less
-memory, or less time, or fewer tasks or nodes, than you have requested, and it
-will still run.
+请注意，仅*请求*这些资源并不能使您的作业运行得更快，也不一定意味着您将消耗所有这些资源。这仅意味着这些内容可供您使用。您的作业最终可能会使用比您请求的更少的内存、更少的时间或更少的任务或节点，并且它仍然会运行。
 
-It's best if your requests accurately reflect your job's requirements. We'll
-talk more about how to make sure that you're using resources effectively in a
-later episode of this lesson.
+最好是您的请求准确地反映了您的作业要求。我们将在本课的后面部分详细讨论如何确保您有效地使用资源。
 
-> ## Submitting Resource Requests
+> ## 提交资源请求
 >
-> Modify our `hostname` script so that it runs for a minute, then submit a job
-> for it on the cluster.
+> 修改我们的“主机名”脚本，让它运行一分钟，然后在集群上为它提交一个作业。
 >
-> > ## Solution
+> > ## 解决方案
 > >
 > > ```
 > > {{ site.remote.prompt }} cat example-job.sh
@@ -428,15 +306,13 @@ later episode of this lesson.
 > > ```
 > > {: .language-bash}
 > >
-> > Why are the {{ site.sched.name }} runtime and `sleep` time not identical?
+> > 为什么{{ site.sched.name }}运行时和`sleep`时间不相同？
 > {: .solution}
 {: .challenge}
 
 {% include {{ site.snippets }}/scheduler/print-sched-variables.snip %}
 
-Resource requests are typically binding. If you exceed them, your job will be
-killed. Let's use walltime as an example. We will request 30 seconds of
-walltime, and attempt to run a job for two minutes.
+资源请求通常是绑定的。如果你超过了他们，你的作业就会被扼杀。让我们以walltime为例。我们将请求30秒的walltime，并尝试运行作业两分钟。
 
 ```
 {{ site.remote.prompt }} cat example-job.sh
@@ -455,8 +331,7 @@ echo "This script has finished successfully."
 ```
 {: .output}
 
-Submit the job and wait for it to finish. Once it is has finished, check the
-log file.
+提交作业并等待它完成。完成后，检查日志文件。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.submit.name }} {% if site.sched.submit.options != '' %}{{ site.sched.submit.options }} {% endif %}example-job.sh
@@ -468,23 +343,11 @@ log file.
 
 {% include {{ site.snippets }}/scheduler/runtime-exceeded-output.snip %}
 
-Our job was killed for exceeding the amount of resources it requested. Although
-this appears harsh, this is actually a feature. Strict adherence to resource
-requests allows the scheduler to find the best possible place for your jobs.
-Even more importantly, it ensures that another user cannot use more resources
-than they've been given. If another user messes up and accidentally attempts to
-use all of the cores or memory on a node, {{ site.sched.name }} will either
-restrain their job to the requested resources or kill the job outright. Other
-jobs on the node will be unaffected. This means that one user cannot mess up
-the experience of others, the only jobs affected by a mistake in scheduling
-will be their own.
+我们的作业因超出其请求的资源量而被终止。尽管这看起来很苛刻，但这实际上是一个功能。严格遵守资源请求允许调度器为您的作业找到最佳位置。更重要的是，它确保另一个用户不能使用比他们所获得的资源更多的资源。如果另一个用户搞砸了并且不小心尝试使用节点上的所有内核或内存，{{ site.sched.name }} 将限制他们的作业到请求的资源或直接终止作业。节点上的其他作业将不受影响。这意味着一个用户不能破坏其他用户的体验，唯一受调度错误影响的作业将是他们自己的。
 
-## Cancelling a Job
+## 取消作业
 
-Sometimes we'll make a mistake and need to cancel a job. This can be done with
-the `{{ site.sched.del }}` command. Let's submit a job and then cancel it using
-its job number (remember to change the walltime so that it runs long enough for
-you to cancel it before it is killed!).
+有时我们会犯错，需要取消作业。这可以通过`{{ site.sched.del }}`命令来完成。让我们提交一个作业，然后使用它的作业编号取消它（记住更改walltime以便它运行足够长的时间让您在它被杀死之前取消它！）。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.submit.name }} {% if site.sched.submit.options != '' %}{{ site.sched.submit.options }} {% endif %}example-job.sh
@@ -494,9 +357,7 @@ you to cancel it before it is killed!).
 
 {% include {{ site.snippets }}/scheduler/terminate-job-begin.snip %}
 
-Now cancel the job with its job number (printed in your terminal). A clean
-return of your command prompt indicates that the request to cancel the job was
-successful.
+现在取消带有作业编号的作业（打印在您的终端中）。命令提示符的干净返回表明取消作业的请求成功。
 
 ```
 {{ site.remote.prompt }} {{site.sched.del }} 38759
@@ -509,17 +370,11 @@ successful.
 
 {% include {{ site.snippets }}/scheduler/terminate-multiple-jobs.snip %}
 
-## Other Types of Jobs
+## 其他类型的作业
 
-Up to this point, we've focused on running jobs in batch mode.
-{{ site.sched.name }} also provides the ability to start an interactive session.
+到目前为止，我们一直专注于以批处理模式运行作业。{{ site.sched.name }}还提供了启动交互式会话的能力。
 
-There are very frequently tasks that need to be done interactively. Creating an
-entire job script might be overkill, but the amount of resources required is
-too much for a login node to handle. A good example of this might be building a
-genome index for alignment with a tool like
-[HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml). Fortunately, we can
-run these types of tasks as a one-off with `{{ site.sched.interactive }}`.
+有非常频繁的作业需要以交互方式完成。创建一个完整的作业脚本可能是多余的，但所需的资源量对于登录节点来说太多了。一个很好的例子可能是建立一个基因组索引，以便与[HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml) 等工具对齐。幸运的是，我们可以使用`{{ site.sched.interactive }}`一次性运行这些类型的任务。
 
 {% include {{ site.snippets }}/scheduler/using-nodes-interactively.snip %}
 

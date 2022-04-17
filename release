@@ -1,0 +1,9 @@
+#!/bin/bash
+
+make site
+
+\mv -f _site hpc1
+
+rsync -r hpc1 root@175.24.122.92:/opt/elearning/
+
+\mv -f hpc1 _site

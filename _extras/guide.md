@@ -1,79 +1,70 @@
 ---
 layout: page
-title: "Glossary"
+title: "词汇表"
 permalink: /guide/
 ---
 
-## Glossary
+## 词汇表
 
-The following list captures terms that need to be added to this glossary. This
-is a great way to contribute.
+以下列表包含需要添加到此词汇表中的术语。
 
 {:auto_ids}
-[Accelerator](https://en.wikipedia.org/wiki/Hardware_acceleration)
-:    *to be defined*
+[硬件加速Accelerator](https://en.wikipedia.org/wiki/Hardware_acceleration)
+:    硬件加速是指在计算机中通过把计算量非常大的作业分配给专门的硬件来处理以减轻中央处理器的作业量之技术。
 
-[Beowulf cluster](https://en.wikipedia.org/wiki/Beowulf_cluster)
-:    *to be defined*
+[Beowulf集群 - Beowulf cluster](http://www.jointforce.com.cn/page/hardware_linux.html)
+:    在1994年夏季，Thomas Sterling和Don Becker在CESDIS(The Center of Excellence in Space Data and Information Sciences)用16个节点和以太网组成了一个计算机集群系统，并将这个系统命名为Beowulf。Beowulf集群提供了一种使用COTS(Commodity off the shelf)硬件构造集群系统以满足特殊的计算需求的方法。这里的COTS是指象PC和以太网这种广为应用的标准设备，它们通常可以由多家厂商提供，所以通常有很高的性价比。Beowulf集群这种方法很快从NASA传遍了整个科研机构和社团。实际上，Beowulf集群现在已被人们看作高性能计算中的一个分支或流派。
 
-[Central processing unit](https://en.wikipedia.org/wiki/CPU)
-:     or simply *processor* is the (hardware) component of a computer that
-      executes the instructions supplied by a program (software). Most modern
-      desktop computers have multi-core processors, e.g. devices with 2 CPUs
-      are called dual-core, with 4 cores are called quad-core and so on. Each
-      **core** is a separate physical implementation of the electronic
-      circuitry required to execute instructions.
+[CPU - Central processing unit](https://en.wikipedia.org/wiki/CPU)
+:     简单地说*处理器*是计算机的（硬件）组件，执行程序（软件）提供的指令。最现代的台式计算机具有多核处理器，例如具有2个CPU的设备称为双核，4个称为四核，以此类推。
 
-[Cloud computing](https://en.wikipedia.org/wiki/Cloud_computing)
-:    *to be defined*
+云计算Cloud computing
+:    云计算(Cloud Computing)是一种新兴的商业计算模型。它将计算任务分布在大量计算机构成的资源池上，使各种应用系统能够根据需要获取计算力、存储空间和各种软件服务。
 
-[Cluster](https://en.wikipedia.org/wiki/Computer_cluster)
-:     a collection of computers configured to enable collaboration on a common
-      task by means of purposefully configured hardware (e.g., networking)
-      and software (e.g. workload management).
+集群Cluster
+:     集群，一组计算机，配置为在一个共同的基础上通过有目的地配置的硬件（例如网络）进行协作完成任务和软件作业（例如作业负载管理）。
 
-[Distributed memory](https://en.wikipedia.org/wiki/Distributed_memory)
-:    *to be defined*
+分布式内存Distributed memory
+:    分布式内存系统是由多个处理器(CPU)组成，每个处理器可以位于不同的计算机上，并且都有自己私有的内存。MPI（message passing interface）是运行在分布式计算机系统上的并行应用程序所使用的最流行的通信协议。在分布式计算机系统中，当某个处理器上的作业需要远程数据时，这个作业需要通过通信信道与远程处理器进行通信（此时，就用到了MPI）。因此MPI主要关注的是帮助开发在集群上运行的应用程序。  
 
-[Grid computing](https://en.wikipedia.org/wiki/Grid_computing)
-:    *to be defined*
+网格计算Grid computing
+:    网格计算是分布式计算（Distributed Computing）的一种，如果我们说某项作业是分布式的，那么，参与这项作业的一定不只是一台计算机，而是一个计算机网络，显然这种“蚂蚁搬山”的方 式将具有很强的数据处理能力。
 
-[High availability computing](https://en.wikipedia.org/wiki/High_availability)
-:    *to be defined*
+高可用计算High availability computing
+:    高可用性HA（High Availability）指的是通过尽量缩短因日常维护操作（计划）和突发的系统崩溃（非计划）所导致的停机时间，以提高系统和应用的可用性。它与被认为是不间断操作的容错技术有所不同。HA系统是目前企业防止核心计算机系统因故障停机的最有效手段。
 
-[High performance computing](https://en.wikipedia.org/wiki/Supercomputer)
-:    *to be defined*
+High performance computing
+:    行处理算法，来解决复杂的计算问题。这项技术主要用于科学、军事和学术领域。随着商业事务变得越来越复杂，HPC正在被利用在数据存储和事务处理领域，以及为统计目的挖掘或使用这些信息；"深蓝"是一种超级计算机，它通过与人类大师对弈来展示人工智能。高性能计算的主要目标是以精确、快速、高效的方式解决计算问题，并行处理是高性能计算成功的关键。并行处理使用多个中央处理器（CPU）来计算一个问题，在技术上可以使计算速度更快。其他形式的提高计算速度，包括多台计算机连接在一起称为群集计算机，也有助于高性能计算。
 
-[Interconnect](https://en.wikipedia.org/wiki/Supercomputer_architecture)
-:    *to be defined*
+高速互联Interconnect
+:    超算中心采用高速互联的网络来完成高性能计算作业。
 
-[Node](https://en.wikipedia.org/wiki/Node_(computer_science))
-:    *to be defined*
+计算节点Node
+:    一类用于计算任务的服务器。高性能计算HPC集群中计算节点一般 分3种: MPI节点、胖节点、GPU加速节点。双路节点称为瘦节点(MPI节点)，双路以上称为胖节点；胖节点配置大容量内存；集群中胖节点的数量要根据实际应用需求而定。
 
-[Parallel](https://en.wikipedia.org/wiki/Parallel_computing)
-:    *to be defined*
+并行计算Parallel
+:    并行计算或称平行计算是相对于串行计算来说的。它是一种一次可执行多个指令的算法，目的是提高计算速度，及通过扩大问题求解规模，解决大型而复杂的计算问题。所谓并行计算可分为时间上的并行和空间上的并行。 时间上的并行就是指流水线技术，而空间上的并行则是指用多个处理器并发的执行计算。
 
-[Serial](https://en.wikipedia.org/wiki/Serial_computer)
-:    *to be defined*
+串行计算机Serial
+:    具有串行作业特点的计算机即采用串行传送方式和串行操作方式的计算机
 
-[Server](https://en.wikipedia.org/wiki/Server_(computing))
-:    *to be defined*
+服务器计算Server
+:    服务器计算结构是一种基于信息的组合式结构，意在提高集中化的时间共享大型机计算。客户机被定义为一种服务请求器，服务器被定义为一种服务供应商。单个机器既可以作为客户机也可以作为服务器，这主要取决于软件配置及执行功能类型。
 
-[Shared memory](https://en.wikipedia.org/wiki/Shared_memory)
-:    *to be defined*
+共享内存Shared memory
+:    共享内存是System V版本的最后一个进程间通信方式。共享内存，顾名思义就是允许两个不相关的进程访问同一个逻辑内存，共享内存是两个正在运行的进程之间共享和传递数据的一种非常有效的方式。不同进程之间共享的内存通常为同一段物理内存。进程可以将同一段物理内存连接到他们自己的地址空间中，所有的进程都可以访问共享内存中的地址。如果某个进程向共享内存写入数据，所做的改动将立即影响到可以访问同一段共享内存的任何其他进程。
 
-[Slurm](https://en.wikipedia.org/wiki/Slurm_Workload_Manager)
-:    *to be defined*
+调度器Slurm
+:    Slurm作业调度工具是面向Linux和Unix类似内核的免费和开源作业调度器，由世界上许多超级计算机和计算机集群使用。 它提供了三个关键功能。 首先，它在一段时间内为用户分配对资源（计算机节点）的独占和/或非独占访问权限，以便他们可以执行作业。 其次，它提供了一个框架，用于在一组分配的节点上启动，执行和监视作业（通常是并行作业，例如MPI）。 最后，它通过管理待处理作业队列来仲裁资源争用。
 
-[Supercomputer](https://en.wikipedia.org/wiki/Supercomputer)
-:    ["... a major scientific instrument ..."](
-https://www.hpcnotes.com/2015/10/essential-analogies-for-hpc-advocate.html)
+超级计算机Supercomputer
+:    超级计算机（Super computer）是指能够执行一般个人电脑无法处理的大量资料与高速运算的电脑。就超级计算机和普通计算机的组成而言，构成组件基本相同，但在性能和规模方面却有差异。超级计算机主要特点包含两个方面：极大的数据存储容量和极快速的数据处理速度，因此它可以在多种领域进行一些人们或者普通计算机无法进行的作业。
 
-[Workstation](https://en.wikipedia.org/wiki/Workstation)
-:    *to be defined*
+作业站Workstation
+:    作业站是一种高端的通用微型计算机。它是为了单用户使用并提供比个人计算机更强大的性能，尤其是在图形处理能力，任务并行方面的能力。通常配有高分辨率的大屏、多屏显示器及容量很大的内存储器和外部存储器，并且具有极强的信息和高性能的图形、图像处理功能的计算机。另外，连接到服务器的终端机也可称为作业站。作业站的应用领域有： 科学和工程计算、软件开发、计算机辅助分析、计算机辅助制造、工程设计和应用、图形和图像处理、过程控制和信息管理等。
 
-[Grid Engine](https://en.wikipedia.org/wiki/Oracle_Grid_Engine)
-:    *to be defined*
+Grid Engine
+:    Grid Engine 是 Sun 发起 的网格计算项目，为从集群到网格的计算环境提供了分布式的资源管理平台，以实现分布式网格计算的基础设施。在 Grid Engine 之中，已实现的特性包含在多个 Grid Engine 结点之间共享资源、根据用户所需请求和保存网格资源，同时Grid Engine 具备良好的拓展性，以及强大的统计和报告控制台等功能。
 
-[Parallel File System](https://en.wikipedia.org/wiki/Distributed_file_systems)
-:    *to be defined*
+并行文件系统Parallel File System
+:    并行文件系统：能够支持多个线程同时访问，将多个文件和目录同时映射到许多设备。并行文件系统将系统展现成单个，逻辑地址单元；将一个文件进行stripe（分割）到不同的磁盘；有比较好的容错性。在存储本地，需要考虑的问题有：块的分配；元数据管理；数据可靠性以及错误校正。之外，还有缓存一致性；high availability；弹性存储；性能。

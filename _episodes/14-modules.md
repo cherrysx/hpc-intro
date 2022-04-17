@@ -1,74 +1,42 @@
 ---
-title: "Accessing software via Modules"
+title: "通过Module访问软件"
 teaching: 30
 exercises: 15
 questions:
-- "How do we load and unload software packages?"
+- "我们如何加载和卸载软件包？"
 objectives:
-- "Understand how to load and use a software package."
+- "了解如何加载和使用软件包。"
 keypoints:
-- "Load software with `module load softwareName`."
-- "Unload software with `module purge`"
-- "The module system handles software versioning and package conflicts for you
-  automatically."
+- "使用 `module load softwareName` 加载软件。"
+- "使用“模块清除”卸载软件"
+- "模块系统自动为您处理软件版本控制和包冲突。"
 ---
 
-On a high-performance computing system, it is seldom the case that the software
-we want to use is available when we log in. It is installed, but we will need
-to "load" it before it can run.
+在高性能计算系统上，很少有我们想要使用的软件在登录时可用。它已安装，但我们需要“加载”它才能运行。
 
-Before we start using individual software packages, however, we should
-understand the reasoning behind this approach. The three biggest factors are:
+然而，在我们开始使用单个软件包之前，我们应该了解这种方法背后的原因。最大的三个因素是：
 
-- software incompatibilities
-- versioning
-- dependencies
+- 软件不兼容
+- 版本控制
+- 依赖关系
 
-Software incompatibility is a major headache for programmers. Sometimes the
-presence (or absence) of a software package will break others that depend on
-it. Two of the most famous examples are Python 2 and 3 and C compiler versions.
-Python 3 famously provides a `python` command that conflicts with that provided
-by Python 2. Software compiled against a newer version of the C libraries and
-then used when they are not present will result in a nasty `'GLIBCXX_3.4.20'
-not found` error, for instance.
+软件不兼容是程序员最头疼的问题。有时，软件包的存在（或不存在）会破坏依赖它的其他软件包。两个最著名的例子是Python 2和3以及C编译器版本。例如，Python 3提供了一个著名的“python”命令，该命令与Python 2提供的命令冲突。基于较新版本的C库编译的软件然后在这些库不存在时使用将导致令人讨厌的“未找到GLIBCXX_3.4.20”错误，
 
-Software versioning is another common issue. A team might depend on a certain
-package version for their research project - if the software version was to
-change (for instance, if a package was updated), it might affect their results.
-Having access to multiple software versions allow a set of researchers to
-prevent software versioning issues from affecting their results.
+软件版本控制是另一个常见问题。一个团队可能依赖于他们的研究项目的某个包版本——如果软件版本发生变化（例如，如果一个包被更新），它可能会影响他们的结果。访问多个软件版本允许一组研究人员防止软件版本问题影响他们的结果。
 
-Dependencies are where a particular software package (or even a particular
-version) depends on having access to another software package (or even a
-particular version of another software package). For example, the VASP
-materials science software may depend on having a particular version of the
-FFTW (Fastest Fourier Transform in the West) software library available for it
-to work.
+依赖关系是特定软件包（甚至特定版本）依赖于访问另一个软件包（甚至是另一个软件包的特定版本）的地方。例如，VASP材料科学软件可能依赖于特定版本的FFTW（西方最快傅立叶变换）软件库可供其作业。
 
-## Environment Modules
+## 环境模块
 
-Environment modules are the solution to these problems. A *module* is a
-self-contained description of a software package -- it contains the
-settings required to run a software package and, usually, encodes required
-dependencies on other software packages.
+环境模块是这些问题的解决方案。*模块*是软件包的自包含描述——它包含运行软件包所需的设置，并且通常编码对其他软件包所需的依赖项。
 
-There are a number of different environment module implementations commonly
-used on HPC systems: the two most common are *TCL modules* and *Lmod*. Both of
-these use similar syntax and the concepts are the same so learning to use one
-will allow you to use whichever is installed on the system you are using. In
-both implementations the `module` command is used to interact with environment
-modules. An additional subcommand is usually added to the command to specify
-what you want to do. For a list of subcommands you can use `module -h` or
-`module help`. As for all commands, you can access the full help on the *man*
-pages with `man module`.
+HPC系统上常用的环境模块实现有很多：最常见的两个是*TCL 模块*和*Lmod*。这两个都使用相似的语法并且概念是相同的，因此学习使用一个将允许您使用您正在使用的系统上安装的任何一个。在这两种实现中，`module` 命令都用于与环境模块进行交互。通常会在命令中添加一个额外的子命令来指定您想要执行的操作。对于子命令列表，您可以使用 `module -h` 或 `module help`。 对于所有命令，您可以使用`man module`访问*man*页面上的完整帮助。
 
-On login you may start out with a default set of modules loaded or you may
-start out with an empty environment; this depends on the setup of the system
-you are using.
+登录时，您可以从加载的默认模块集开始，也可以从空环境开始；这取决于您使用的系统的设置。
 
-### Listing Available Modules
+### 列出可用模块
 
-To see available software modules, use `module avail`:
+要查看可用的软件模块，请使用“module avail”：
 
 ```
 {{ site.remote.prompt }} module avail
@@ -77,11 +45,9 @@ To see available software modules, use `module avail`:
 
 {% include {{ site.snippets }}/modules/available-modules.snip %}
 
-### Listing Currently Loaded Modules
+### 列出当前加载的模块
 
-You can use the `module list` command to see which modules you currently have
-loaded in your environment. If you have no modules loaded, you will see a
-message telling you so
+您可以使用`module list`命令查看当前在您的环境中加载了哪些模块。如果您没有加载任何模块，您将看到一条消息告诉您
 
 ```
 {{ site.remote.prompt }} module list
@@ -93,14 +59,11 @@ No Modulefiles Currently Loaded.
 ```
 {: .output}
 
-## Loading and Unloading Software
+## 加载和卸载软件
 
-To load a software module, use `module load`. In this example we will use
-Python 3.
+要加载软件模块，请使用“模块加载”。在本例中，我们将使用Python 3。
 
-Initially, Python 3 is not loaded. We can test this by using the `which`
-command. `which` looks for programs the same way that Bash does, so we can use
-it to tell us where a particular piece of software is stored.
+最初，没有加载Python 3。我们可以使用`which` 命令对此进行测试。`which`查找程序的方式与Bash相同，因此我们可以使用它来告诉我们特定软件的存储位置。
 
 ```
 {{ site.remote.prompt }} which python3
@@ -109,20 +72,15 @@ it to tell us where a particular piece of software is stored.
 
 {% include {{ site.snippets }}/modules/missing-python.snip %}
 
-We can load the `python3` command with `module load`:
+我们可以使用`module load`加载`python3`命令：
 
 {% include {{ site.snippets }}/modules/module-load-python.snip %}
 
 {% include {{ site.snippets }}/modules/python-executable-dir.snip %}
 
-So, what just happened?
+那么，刚刚发生了什么？
 
-To understand the output, first we need to understand the nature of the `$PATH`
-environment variable. `$PATH` is a special environment variable that controls
-where a UNIX system looks for software. Specifically `$PATH` is a list of
-directories (separated by `:`) that the OS searches through for a command
-before giving up and telling us it can't find it. As with all environment
-variables we can print it out using `echo`.
+要了解输出，首先我们需要了解`$PATH`环境变量的性质。`$PATH` 是一个特殊的环境变量，它控制Linux系统查找软件的位置。具体来说，`$PATH`是一个目录列表（由 `:` 分隔），操作系统在放弃并告诉我们找不到命令之前会搜索该目录。与所有环境变量一样，我们可以使用`echo`将其打印出来。
 
 ```
 {{ site.remote.prompt }} echo $PATH
@@ -131,33 +89,21 @@ variables we can print it out using `echo`.
 
 {% include {{ site.snippets }}/modules/python-module-path.snip %}
 
-You'll notice a similarity to the output of the `which` command. In this case,
-there's only one difference: the different directory at the beginning. When we
-ran the `module load` command, it added a directory to the beginning of our
-`$PATH`. Let's examine what's there:
+您会注意到与“which”命令的输出相似。在这种情况下，只有一个区别：开头的目录不同。当我们运行 `module load` 命令时，它会在`$PATH`的开头添加一个目录。让我们检查一下那里有什么：
 
 {% include {{ site.snippets }}/modules/python-ls-dir-command.snip %}
 
 {% include {{ site.snippets }}/modules/python-ls-dir-output.snip %}
 
-Taking this to its conclusion, `module load` will add software to your `$PATH`.
-It "loads" software. A special note on this - depending on which version of the
-`module` program that is installed at your site, `module load` will also load
-required software dependencies.
+综上所述，“module load”会将软件添加到您的“$PATH”中。它“加载”软件。对此特别注意 - 根据您站点上安装的“module”程序的版本，"module load"还将加载所需的软件依赖项。
 
 {% include {{ site.snippets }}/modules/software-dependencies.snip %}
 
-## Software Versioning
+## 软件版本控制
 
-So far, we've learned how to load and unload software packages. This is very
-useful. However, we have not yet addressed the issue of software versioning. At
-some point or other, you will run into issues where only one particular version
-of some software will be suitable. Perhaps a key bugfix only happened in a
-certain version, or version X broke compatibility with a file format you use.
-In either of these example cases, it helps to be very specific about what
-software is loaded.
+到目前为止，我们已经学习了如何加载和卸载软件包。这非常有用。但是，我们还没有解决软件版本控制的问题。在某些时候，您会遇到某些软件只有一个特定版本适用的问题。也许一个关键的错误修复只发生在某个版本中，或者版本X破坏了与您使用的文件格式的兼容性。在这些示例情况下，非常具体地了解加载的软件是有帮助的。
 
-Let's examine the output of `module avail` more closely.
+让我们更仔细地检查`module avail`的输出。
 
 ```
 {{ site.remote.prompt }} module avail
@@ -168,14 +114,11 @@ Let's examine the output of `module avail` more closely.
 
 {% include {{ site.snippets }}/modules/wrong-gcc-version.snip %}
 
-> ## Using Software Modules in Scripts
+> ## 在脚本中使用软件模块
 >
-> Create a job that is able to run `python3 --version`. Remember, no software
-> is loaded by default! Running a job is just like logging on to the system
-> (you should not assume a module loaded on the login node is loaded on a
-> compute node).
+> 创建一个能够运行`python3 --version`的作业。请记住，默认情况下不加载任何软件！运行作业就像登录系统一样（您不应假设登录节点上加载的模块已加载到计算节点上）。
 >
-> > ## Solution
+> > ## 解决方案
 > >
 > > ```
 > > {{ site.remote.prompt }} nano python-module.sh

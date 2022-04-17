@@ -1,54 +1,33 @@
 ---
-title: "Using resources effectively"
+title: "有效利用资源"
 teaching: 10
 exercises: 30
 questions:
-- "How do we monitor our jobs?"
-- "How can I get my jobs scheduled more easily?"
+- "我们如何监控我们的作业？"
+- "如何更轻松地安排我的作业？"
 objectives:
-- "Understand how to look up job statistics and profile code."
-- "Understand job size implications."
+- "了解如何查找作业统计信息和个人资料代码。"
+- "了解作业规模的影响。"
 keypoints:
-- "The smaller your job, the faster it will schedule."
+- "您的作业作越小，安排的速度就越快。"
 ---
 
-We've touched on all the skills you need to interact with an HPC cluster:
-logging in over SSH, loading software modules, submitting parallel jobs, and
-finding the output. Let's learn about estimating resource usage and why it
-might matter.
+我们已经介绍了与HPC集群交互所需的所有技能：通过SSH登录、加载软件模块、提交并行作业以及查找输出。让我们了解估计资源使用情况以及它为何重要。
 
-## Estimating Required Resources Using the Scheduler
+## 使用调度器估计所需资源
 
-Although we covered requesting resources from the scheduler earlier with the
-&#960; code, how do we know what type of resources the software will need in
-the first place, and its demand for each? In general, unless the software
-documentation or user testimonials provide some idea, we won't know how much
-memory or compute time a program will need.
+尽管我们之前使用&#960;介绍了从调度器请求资源。我们如何知道软件首先需要什么类型的资源，以及对每种资源的需求？一般来说，除非软件文档或用户推荐提供一些想法，否则我们不会知道程序需要多少内存或计算时间。
 
-> ## Read the Documentation
+> ## 阅读文档
 >
-> Most HPC facilities maintain documentation as a wiki, a website, or a
-> document sent along when you register for an account. Take a look at these
-> resources, and search for the software you plan to use: somebody might have
-> written up guidance for getting the most out of it.
+> 大多数HPC设施将文档保存为wiki、网站或在您注册帐户时发送的文档。查看这些资源，并搜索您计划使用的软件：有人可能已经编写了充分利用它的指南。
 {: .callout}
 
-A convenient way of figuring out the resources required for a job to run
-successfully is to submit a test job, and then ask the scheduler about its
-impact using `{{ site.sched.hist }}`. You can use this knowledge to set up the
-next job with a closer estimate of its load on the system. A good general rule
-is to ask the scheduler for 20% to 30% more time and memory than you expect the
-job to need. This ensures that minor fluctuations in run time or memory use
-will not result in your job being cancelled by the scheduler. Keep in mind that
-if you ask for too much, your job may not run even though enough resources are
-available, because the scheduler will be waiting for other people's jobs to
-finish and free up the resources needed to match what you asked for.
+确定作业成功运行所需资源的一种简便方法是提交测试作业，然后使用{{ site.sched.hist }}向调度器询问其影响。您可以使用这些知识来设置下一个作业，并更准确地估计其在系统上的负载。一个好的一般规则是要求调度器比您预期的作业需要多20%到30%的时间和内存。这可确保运行时间或内存使用的微小波动不会导致您的作业被调度器取消。请记住，如果您要求太多，即使有足够的资源可用，您的作业也可能无法运行，因为调度器将等待其他人的作业完成并释放与您要求的内容匹配所需的资源。
 
-## Stats
+## 统计数据
 
-Since we already submitted `pi.py` to run on the cluster, we can query the
-scheduler to see how long our job took and what resources were used. We will
-use `{{ site.sched.hist }}` to get statistics about `parallel-pi.sh`.
+由于我们已经提交了`pi.py`以在集群上运行，我们可以查询调度器以查看我们的作业花费了多长时间以及使用了哪些资源。我们将使用`{{ site.sched.hist }}` 来获取有关`parallel-pi.sh`的统计信息。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.hist }}
@@ -57,46 +36,36 @@ use `{{ site.sched.hist }}` to get statistics about `parallel-pi.sh`.
 
 {% include {{ site.snippets }}/resources/account-history.snip %}
 
-This shows all the jobs we ran recently (note that there are multiple entries
-per job). To get info about a specific job, we change command slightly.
+这显示了我们最近运行的所有作业（请注意，每个作业有多个条目）。要获取有关特定作业的信息，我们稍微更改命令。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.hist }} {{ site.sched.flag.histdetail }} 1965
 ```
 {: .language-bash}
 
-It will show a lot of info, in fact, every single piece of info collected on
-your job by the scheduler. It may be useful to redirect this information to
-`less` to make it easier to view (use the left and right arrow keys to scroll
-through fields).
+它将显示很多信息，事实上，调度器在您的作业中收集的每条信息。将此信息重定向到`less`以使其更易于查看可能很有用（使用左右箭头键滚动浏览字段）。
 
 ```
 {{ site.remote.prompt }} {{ site.sched.hist }} {{ site.sched.flag.histdetail }} 1965 | less
 ```
 {: .language-bash}
 
-Some interesting fields include the following:
+一些有趣的领域包括：
 
-* **Hostname**: Where did your job run?
-* **MaxRSS**: What was the maximum amount of memory used?
-* **Elapsed**: How long did the job take?
-* **State**: What is the job currently doing/what happened to it?
-* **MaxDiskRead**: Amount of data read from disk.
-* **MaxDiskWrite**: Amount of data written to disk.
+* **主机名**：您的作业在哪里运行？
+* **MaxRSS**：使用的最大内存量是多少？
+* **Elapsed**：这项作业花了多长时间？
+* **状态**：目前的作业是什么/发生了什么？
+* **MaxDiskRead**：从磁盘读取的数据量。
+* **MaxDiskWrite**：写入磁盘的数据量。
 
-## Measuring the System Load From Currently Running Tasks
+## 从当前运行的任务中测量系统负载
 
-Typically, clusters allow users to connect directly to compute nodes from the
-head node. This is useful to check on a running job and see how it's doing, but
-is not a recommended practice in general, because it bypasses the resource
-manager. To reduce the risk of interfering with other users, some clusters will
-only allow you to connect to nodes on which you have running jobs. Let's
-practice by taking a look at what's running on the login node right now.
+通常，集群允许用户从头节点直接连接到计算节点。这对于检查正在运行的作业并查看它的运行情况很有用，但通常不是推荐的做法，因为它绕过了资源管理器。为了降低干扰其他用户的风险，一些集群只允许您连接到您正在运行作业的节点。让我们通过看看现在登录节点上正在运行什么来练习。
 
-### Monitor System Processes With `top`
+### 使用`top`监控系统进程
 
-The most reliable way to check current system stats is with `top`. Some sample
-output might look like the following (type `q` to exit `top`):
+检查当前系统统计信息的最可靠方法是使用`top`。一些示例输出可能如下所示（输入`q`退出`top`）：
 
 ```
 {{ site.remote.prompt }} top
@@ -105,24 +74,17 @@ output might look like the following (type `q` to exit `top`):
 
 {% include {{ site.snippets }}/resources/monitor-processes-top.snip %}
 
-Overview of the most important fields:
+最重要领域的概述：
 
-* `PID`: What is the numerical id of each process?
-* `USER`: Who started the process?
-* `RES`: What is the amount of memory currently being used by a process (in
-  bytes)?
-* `%CPU`: How much of a CPU is each process using? Values higher than 100
-  percent indicate that a process is running in parallel.
-* `%MEM`: What percent of system memory is a process using?
-* `TIME+`: How much CPU time has a process used so far? Processes using 2 CPUs
-  accumulate time at twice the normal rate.
-* `COMMAND`: What command was used to launch a process?
+* `PID`: 每个进程的数字id是多少？
+* `USER`: 谁开始了这个进程？
+* `RES`: 进程当前使用的内存量是多少（以字节为单位）？
+* `%CPU`: 每个进程使用多少CPU？ 高于100%的值表示进程正在并行运行。
+* `%MEM`: 进程使用的系统内存百分比是多少？
+* `TIME+`: 到目前为止，一个进程使用了多少CPU时间？ 使用2个CPU的进程以正常速率的两倍累积时间。
+* `COMMAND`: 使用什么命令启动进程？
 
-`htop` provides an overlay for `top` using [curses](
-https://en.wikipedia.org/wiki/Curses_(programming_library)), producing a
-better-organized and "prettier" dashboard in your terminal. Unfortunately, it
-is not always available. If this is the case, ask your system administrators to
-install it for you. Don't be shy, they're here to help!
+`htop`使用 curses为`top`提供了一个覆盖，在您的终端中生成一个组织更好、“更漂亮”的仪表板。不幸的是，它并不总是可用的。如果是这种情况，请让您的系统管理员为您安装它。
 
 ```
 {{ site.remote.prompt }} htop
@@ -131,7 +93,7 @@ install it for you. Don't be shy, they're here to help!
 
 ### `ps`
 
-To show all processes from your current session, type `ps`.
+要显示当前会话中的所有进程，请键入`ps`。
 
 ```
 {{ site.remote.prompt }} ps
@@ -145,9 +107,7 @@ To show all processes from your current session, type `ps`.
 ```
 {: .output}
 
-Note that this will only show processes from our current session. To show all
-processes you own (regardless of whether they are part of your current session
-or not), you can use `ps ux`.
+请注意，这只会显示我们当前会话的进程。 要显示您拥有的所有进程（无论它们是否属于您当前会话的一部分），您可以使用 `ps ux`。
 
 ```
 {{ site.remote.prompt }} ps ux
@@ -162,6 +122,6 @@ or not), you can use `ps ux`.
 ```
 {: .output}
 
-This is useful for identifying which processes are doing what.
+这对于识别哪些进程正在做什么很有用。
 
 {% include links.md %}

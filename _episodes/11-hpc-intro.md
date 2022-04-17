@@ -1,179 +1,97 @@
 ---
-title: "Why use a Cluster?"
+title: "为什么要使用集群？"
 teaching: 15
 exercises: 5
 questions:
-- "Why would I be interested in High Performance Computing (HPC)?"
-- "What can I expect to learn from this course?"
+- "为什么我会对高性能计算 (HPC) 感兴趣？"
+- "我可以从这门课程中学到什么？"
 objectives:
-- "Be able to describe what an HPC system is"
-- "Identify how an HPC system could benefit you."
+- "能够描述什么是HPC系统"
+- "确定您如何从HPC系统受益"
 keypoints:
-- "High Performance Computing (HPC) typically involves connecting to very large
-  computing systems elsewhere in the world."
-- "These other systems can be used to do work that would either be impossible
-  or much slower on smaller systems."
-- "The standard method of interacting with such systems is via a command line
-  interface."
+- "高性能计算(HPC)通常涉及连接到世界其他地方的超大型计算系统。"
+- "这些其他系统可用于完成在较小系统上不可能或慢得多的作业。"
+- "与此类系统交互的标准方法是通过命令行界面。"
 ---
 
-Frequently, research problems that use computing can outgrow the capabilities
-of the desktop or laptop computer where they started:
+通常，使用计算的研究问题可能会超出他们的台式机或笔记本电脑的能力：
 
-* A statistics student wants to cross-validate a model. This involves running
-  the model 1000 times -- but each run takes an hour. Running the model on
-  a laptop will take over a month! In this research problem, final results are
-  calculated after all 1000 models have run, but typically only one model is
-  run at a time (in **serial**) on the laptop. Since each of the 1000 runs is
-  independent of all others, and given enough computers, it's theoretically
-  possible to run them all at once (in **parallel**).
-* A genomics researcher has been using small datasets of sequence data, but
-  soon will be receiving a new type of sequencing data that is 10 times as
-  large. It's already challenging to open the datasets on a computer --
-  analyzing these larger datasets will probably crash it. In this research
-  problem, the calculations required might be impossible to parallelize, but a
-  computer with **more memory** would be required to analyze the much larger
-  future data set.
-* An engineer is using a fluid dynamics package that has an option to run in
-  parallel. So far, this option was not used on a desktop. In going from 2D
-  to 3D simulations, the simulation time has more than tripled. It might be
-  useful to take advantage of that option or feature. In this research problem,
-  the calculations in each region of the simulation are largely independent of
-  calculations in other regions of the simulation. It's possible to run each
-  region's calculations simultaneously (in **parallel**), communicate selected
-  results to adjacent regions as needed, and repeat the calculations to
-  converge on a final set of results. In moving from a 2D to a 3D model, **both
-  the amount of data and the amount of calculations increases greatly**, and
-  it's theoretically possible to distribute the calculations across multiple
-  computers communicating over a shared network.
+* 一名统计学专业的学生想要交叉验证一个模型。这涉及运行模型1000次 - 但每次运行需要一个小时。在笔记本电脑上运行模型需要一个多月的时间！ 在这个研究问题中，最终结果是在所有 1000 个模型都运行后计算的，但通常在笔记本电脑上一次只运行一个模型（以**串行**）。 由于 1000 次运行中的每一次都独立于所有其他运行，并且如果有足够的计算机，理论上可以一次运行它们（以**并行**）。
 
-In all these cases, access to more (and larger) computers is needed. Those
-computers should be usable at the same time, **solving many researchers'
-problems in parallel**.
+* 一位基因组学研究人员一直在使用小型序列数据集，但很快就会收到一种10倍大的新型测序数据。在计算机上打开数据集已经很困难了，分析这些更大的数据集可能会导致它崩溃。在这个研究中，所需的计算可能无法并行化，但未来需要具有**更多内存**的计算机来分析更大的数据集。
 
-> ## Break the Ice
+* 一位工程师正在使用可以并行运行的流体动力学软件包。 到目前为止，此选项未在桌面上使用。 从 2D 模拟到 3D 模拟，模拟时间增加了两倍多。 利用该选项或功能可能很有用。 在这个研究问题中，每个模拟区域的计算在很大程度上独立于模拟其他区域的计算。 可以同时（**并行**）运行每个区域的计算，根据需要将选定的结果传送到相邻区域，并重复计算以收敛到最终结果集。 在从 2D 模型迁移到 3D 模型时，**数据量和计算量都大大增加**，理论上可以将计算分布在通过共享网络进行通信的多台计算机之间。
+
+在所有这些情况下，都需要访问更多（和更大）的计算机。这些计算机应该可以同时使用，**同时解决许多研究人员的问题**。
+
+> ## 破冰
 >
-> Talk to your neighbour, office mate or [rubber
-> duck](https://rubberduckdebugging.com/) about your research.
+> 与您的邻居、办公室同事讨论您的研究。
 >
-> * How does computing help you do your research?
-> * How could more computing help you do more or better research?
+> * 计算如何帮助您进行研究？
+> * 更多的计算如何帮助您进行更多或更好的研究？
 {: .discussion }
 
-## Jargon Busting Presentation
+## HPC演示
 
-Open the [HPC Jargon Buster]({{ site.baseurl }}/files/jargon.html#p1) in
-a new tab. To present the content, press `C` to open a **c**lone in
-a separate window, then press `P` to toggle presentation mode.
+在新选项卡中打开[HPC演示]({{ site.baseurl }}/files/jargon.html#p1)。要演示内容，请按“C”在单独的窗口中打开 **c**lone，然后按“P”切换演示模式。
 
-## A Standard Laptop for Standard Tasks
+## 用于标准任务的标准笔记本电脑
 
-Today, people coding or analysing data typically work with laptops.
+今天，人们编码或分析数据通常使用笔记本电脑。
 
 {% include figure.html url="" max-width="20%"
-   file="/fig/200px-laptop-openclipartorg-aoguerrero.svg"
+   file="/hpc1/fig/200px-laptop-openclipartorg-aoguerrero.svg"
    alt="A standard laptop" caption="" %}
 
-Let's dissect what resources programs running on a laptop require:
+让我们剖析一下笔记本电脑上运行的程序需要哪些资源：
 
-* the keyboard and/or touchpad is used to tell the computer what to do
-  (**Input**)
-* the internal computing resources **Central Processing Unit** and **Memory**
-  perform calculation
-* the display depicts progress and results (**Output**)
+* 键盘和/或触摸板用于告诉计算机要做什么（**输入**）
+* 内部计算资源**中央处理器**和**内存**执行计算
+* 显示屏显示进度和结果（**输出**）
 
-Schematically, this can be reduced to the following:
+从原理上讲，这可以简化为以下内容：
 
 {% include figure.html url="" max-width="30%"
-   file="/fig/Simple_Von_Neumann_Architecture.svg"
+   file="/hpc1/fig/Simple_Von_Neumann_Architecture.svg"
    alt="Schematic of how a computer works" caption="" %}
 
-## When Tasks Take Too Long
+## 当任务花费太长时间时
 
-When the task to solve becomes heavy on computations, the operations are
-typically out-sourced from the local laptop or desktop to elsewhere. Take for
-example the task to find the directions for your next vacation. The
-capabilities of your laptop are typically not enough to calculate that route
-spontaneously: [finding the shortest path](
-https://en.wikipedia.org/wiki/Dijkstra's_algorithm) through a network runs on
-the order of (*v* log *v*) time, where *v* (vertices) represents the number of
-intersections in your map. Instead of doing this yourself, you use a website,
-which in turn runs on a server, that is almost definitely not in the same room
-as you are.
+当要解决的计算任务变得繁重时，这些操作通常会从本地笔记本电脑或台式机外包到其他地方。以寻找下一个假期的方向的任务为例。您的笔记本电脑的功能通常不足以自发计算该路线：[找到最短路径]（https://en.wikipedia.org/wiki/Dijkstra's_algorithm) 通过网络以 (*v* log *v*) 时间的顺序运行，其中 *v* (vertices) 表示地图中的交叉点数。
 
 {% include figure.html url="" max-width="20%"
-   file="/fig/servers-openclipartorg-ericlemerdy.svg"
+   file="/hpc1/fig/servers-openclipartorg-ericlemerdy.svg"
    alt="A rack half full with servers" caption="" %}
 
-Note here, that a server is mostly a noisy computer mounted into a rack cabinet
-which in turn resides in a data center. The internet made it possible that
-these data centers do not require to be nearby your laptop. What people call
-**the cloud** is mostly a web-service where you can rent such servers by
-providing your credit card details and requesting remote resources that satisfy
-your requirements. This is often handled through an online, browser-based
-interface listing the various machines available and their capacities in terms
-of processing power, memory, and storage.
+请注意，服务器主要是安装在机架机柜中的计算机，而机架机柜又驻留在数据中心中。互联网使这些数据中心不需要靠近您的笔记本电脑成为可能。人们所说的**云**主要是一种网络服务，您可以通过提供您的信用卡详细信息并请求满足您要求的远程资源来租用此类服务器。这通常通过基于浏览器的在线界面来处理，该界面列出了可用的各种机器及其在处理能力、内存和存储方面的容量。
 
-The server itself has no direct display or input methods attached to it. But
-most importantly, it has much more storage, memory and compute capacity than
-your laptop will ever have. In any case, you need a local device (laptop,
-workstation, mobile phone or tablet) to interact with this remote machine,
-which people typically call 'a server'.
+服务器本身没有附加的显示器或输入法。但最重要的是，它拥有比笔记本电脑更多的存储、内存和计算能力。在任何情况下，您都需要一个本地设备（笔记本电脑、作业站、手机或平板电脑）来与这个人们通常称之为“服务器”的远程机器进行交互。
 
-## When One Server Is Not Enough
+## 当一台服务器不够用时
 
-If the computational task or analysis to complete is daunting for a single
-server, larger agglomerations of servers are used. These go by the name of
-"clusters" or "super computers".
+如果要完成的计算任务或分析对于单个服务器来说是艰巨的，则使用更大的服务器集群。它们被称为“集群”或“超级计算机”。
 
 {% include figure.html url="" max-width="20%"
-   file="/fig/serverrack-openclipartorg-psteinb-basedon-ericlemerdy.svg"
+   file="/hpc1/fig/serverrack-openclipartorg-psteinb-basedon-ericlemerdy.svg"
    alt="A rack with servers" caption="" %}
 
-The methodology of providing the input data, configuring the program options,
-and retrieving the results is quite different to using a plain laptop.
-Moreover, using a graphical interface is often discarded in favor of using the
-command line. This imposes a double paradigm shift for prospective users asked
-to
+提供输入数据、配置程序选项和检索结果的方法与使用普通笔记本电脑完全不同。此外，通常会放弃使用图形界面，而转而使用命令行。这为被要求访问的潜在用户带来了转变要求：
 
-1. work with the command line interface (CLI), rather than a graphical user
-   interface (GUI)
-1. work with a distributed set of computers (called nodes) rather than the
-   machine attached to their keyboard & mouse
+1. 使用命令行界面(CLI)，而不是图形用户界面(GUI)
+1. 使用一组分布式计算机（称为节点）而不是连接到键盘和鼠标的机器
 
-> ## I've Never Used a Server, Have I?
+> ## 我从来没有使用过服务器，是吗？
 >
-> Take a minute and think about which of your daily interactions with a
-> computer may require a remote server or even cluster to provide you with
-> results.
+> 花点时间想想您与计算机的哪些日常交互可能需要远程服务器甚至集群来为您提供结果。
 >
-> > ## Some Ideas
+> > ## 一些想法
 > >
-> > * Checking email: your computer (possibly in your pocket) contacts a remote
-> >   machine, authenticates, and downloads a list of new messages; it also
-> >   uploads changes to message status, such as whether you read, marked as
-> >   junk, or deleted the message. Since yours is not the only account, the
-> >   mail server is probably one of many in a data center.
-> > * Searching for a phrase online involves comparing your search term against
-> >   a massive database of all known sites, looking for matches. This "query"
-> >   operation can be straightforward, but building that database is a
-> >   [monumental task](https://en.wikipedia.org/wiki/MapReduce)! Servers are
-> >   involved at every step.
-> > * Searching for directions on a mapping website involves connecting your
-> >   (A) starting and (B) end points by [traversing a graph](
-> >   https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm) in search of
-> >   the "shortest" path by distance, time, expense, or another metric.
-> >   Converting a map into the right form is relatively simple, but
-> >   calculating all the possible routes between A and B is expensive.
+> > * 检查电子邮件：您的计算机（可能在您的口袋里）联系远程机器，验证并下载新消息列表； 它还会上传对邮件状态的更改，例如您是否已阅读、标记为垃圾邮件或删除了邮件。 由于您的帐户不是唯一的帐户，因此邮件服务器可能是数据中心中的众多帐户之一。
+> > * 在线搜索短语涉及将您的搜索词与所有已知网站的庞大数据库进行比较，以寻找匹配项。这种“查询”操作可能很简单，但构建该数据库是一项巨大的任务。
+> > * 在地图网站上搜索方向涉及通过遍历图形连接您的（A）起点和（B）终点以搜索“最短” 按距离、时间、费用或其他度量标准的路径。将地图转换为正确的形式相对简单，但计算A和B之间所有可能的路线的成本很高。
 > >
-> > Checking email could be serial: your machine connects to one server and
-> > exchanges data. Searching by querying the database for your search term (or
-> > endpoints) could also be serial, in that one machine receives your query
-> > and returns the result. However, assembling and storing the full database
-> > is far beyond the capability of any one machine. Therefore, these functions
-> > are served in parallel by a large, ["hyperscale"](
-> > https://en.wikipedia.org/wiki/Hyperscale_computing) collection of servers
-> > working together.
+> > 检查电子邮件可能是串行的：您的机器连接到一台服务器并交换数据。通过在数据库中查询您的搜索词（或端点）进行搜索也可以是串行的，因为一台机器接收您的查询并返回结果。然而，组装和存储完整的数据库远远超出了任何一台机器的能力。因此，这些功能由一起作业的大型“超大规模”服务器集合并行提供。
 > {: .solution}
 {: .challenge }
 

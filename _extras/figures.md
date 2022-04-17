@@ -1,5 +1,5 @@
 ---
-title: Figures
+title: 课程中的图
 ---
 
 {% include base_path.html %}

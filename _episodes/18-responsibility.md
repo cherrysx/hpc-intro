@@ -1,74 +1,46 @@
 ---
-title: "Using shared resources responsibly"
+title: "负责任地使用共享资源"
 teaching: 15
 exercises: 5
 questions:
-- "How can I be a responsible user?"
-- "How can I protect my data?"
-- "How can I best get large amounts of data off an HPC system?"
+- "我怎样才能成为一个负责任的用户？"
+- "如何保护我的数据？"
+- "如何最好地从HPC系统中获取大量数据？"
 objectives:
-- "Learn how to be a considerate shared system citizen."
-- "Understand how to protect your critical data."
-- "Appreciate the challenges with transferring large amounts of data off HPC
-  systems."
-- "Understand how to convert many files to a single archive file using tar."
+- "学习如何成为一个体贴的共享系统公民。"
+- "了解如何保护您的关键数据。"
+- "了解从HPC系统传输大量数据所面临的挑战。"
+- "了解如何使用 tar 将多个文件转换为单个存档文件。"
 keypoints:
-- "Be careful how you use the login node."
-- "Your data on the system is your responsibility."
-- "Plan and test large data transfers."
-- "It is often best to convert many files to a single archive file before
-  transferring."
-- "Again, don't run stuff on the login node."
+- "请注意如何使用登录节点。"
+- "您在系统上的数据是您的责任。"
+- "计划和测试大型数据传输。"
+- "通常最好在传输之前将许多文件转换为单个存档文件。"
+- "同样，不要在登录节点上运行任何东西。"
 ---
 
-One of the major differences between using remote HPC resources and your own
-system (e.g. your laptop) is that remote resources are shared. How many users
-the resource is shared between at any one time varies from system to system but
-it is unlikely you will ever be the only user logged into or using such a
-system.
+使用远程HPC资源和您自己的系统（例如您的笔记本电脑）之间的主要区别之一是远程资源是共享的。在任何时候共享资源的用户数量因系统而异，但您不太可能成为唯一登录或使用此类系统的用户。
 
-The widespread usage of scheduling systems where users submit jobs on HPC
-resources is a natural outcome of the shared nature of these resources. There
-are other things you, as an upstanding member of the community, need to
-consider.
+用户在HPC资源上提交作业的调度系统的广泛使用是这些资源共享性质的自然结果。作为社区的正直成员，您还需要考虑其他一些事情。
 
-## Be Kind to the Login Nodes
+## 善待登录节点
 
-The login node is often busy managing all of the logged in users, creating and
-editing files and compiling software. If the machine runs out of memory or
-processing capacity, it will become very slow and unusable for everyone. While
-the machine is meant to be used, be sure to do so responsibly -- in ways
-that will not adversely impact other users' experience.
+登录节点经常忙于管理所有登录用户、创建和编辑文件以及编译软件。如果机器内存或处理能力不足，它将变得非常缓慢并且对每个人都无法使用。虽然机器是要被使用的，但一定要负责任地使用——不会对其他用户的体验产生不利影响。
 
-Login nodes are always the right place to launch jobs. Cluster policies vary,
-but they may also be used for proving out workflows, and in some cases, may
-host advanced cluster-specific debugging or development tools. The cluster may
-have modules that need to be loaded, possibly in a certain order, and paths or
-library versions that differ from your laptop, and doing an interactive test
-run on the head node is a quick and reliable way to discover and fix these
-issues.
+登录节点始终是启动作业的正确位置。集群策略各不相同，但它们也可用于验证作业流，并且在某些情况下，可能托管高级集群特定的调试或开发工具。集群可能有需要加载的模块，可能按特定顺序加载，路径或库版本与您的笔记本电脑不同，在头节点上进行交互式测试是发现和修复这些问题的快速可靠的方法 .
 
-> ## Login Nodes Are a Shared Resource
+> ## 登录节点是共享资源
 >
-> Remember, the login node is shared with all other users and your actions
-> could cause issues for other people. Think carefully about the potential
-> implications of issuing commands that may use large amounts of resource.
+> 请记住，登录节点与所有其他用户共享，您的操作可能会给其他人带来问题。仔细考虑发出可能使用大量资源的命令的潜在影响。
 >
-> Unsure? Ask your friendly systems administrator ("sysadmin") if the thing
-> you're contemplating is suitable for the login node, or if there's another
-> mechanism to get it done safely.
+> 不确定？询问您友好的系统管理员（“sysadmin”）您正在考虑的事情是否适合登录节点，或者是否有另一种机制可以安全地完成它。
 {: .callout}
 
-You can always use the commands `top` and `ps ux` to list the processes that
-are running on the login node along with the amount of CPU and memory they are
-using. If this check reveals that the login node is somewhat idle, you can
-safely use it for your non-routine processing task. If something goes wrong
--- the process takes too long, or doesn't respond -- you can use the
-`kill` command along with the *PID* to terminate the process.
+您始终可以使用命令`top`和`ps ux`列出正在登录节点上运行的进程以及它们使用的CPU和内存量。如果此检查显示登录节点有些空闲，您可以安全地将其用于非常规处理任务。如果出现问题——进程耗时过长，或者没有响应——你可以使用`kill`命令和*PID*来终止进程。
 
-> ## Login Node Etiquette
+> ## 登录节点问题
 >
-> Which of these commands would be a routine task to run on the login node?
+> 这些命令中的哪一个是在登录节点上运行的例行任务？
 >
 > 1. `python physics_sim.py`
 > 2. `make`
@@ -76,148 +48,67 @@ safely use it for your non-routine processing task. If something goes wrong
 > 4. `molecular_dynamics_2`
 > 5. `tar -xzf R-3.3.0.tar.gz`
 >
-> > ## Solution
+> > ## 解决方案
 > >
-> > Building software, creating directories, and unpacking software are common
-> > and acceptable > tasks for the login node: options #2 (`make`), #3
-> > (`mkdir`), and #5 (`tar`) are probably OK. Note that script names do not
-> > always reflect their contents: before launching #3, please
-> > `less create_directories.sh` and make sure it's not a Trojan horse.
+> > 构建软件、创建目录和解压软件是常见且可接受的登录节点任务：选项#2 (`make`)、#3 (`mkdir`) 和 #5 (`tar`) 可能都可以。请注意，脚本名称并不总是反映其内容：在启动#3之前，请`less create_directories.sh`并确保它不是特洛伊木马。
 > >
-> > Running resource-intensive applications is frowned upon. Unless you are
-> > sure it will not affect other users, do not run jobs like #1 (`python`)
-> > or #4 (custom MD code). If you're unsure, ask your friendly sysadmin for
-> > advice.
+> > 运行资源密集型应用程序是不受欢迎的。除非您确定它不会影响其他用户，否则不要运行 #1 (`python`) 或 #4（自定义 MD 代码）之类的作业。如果您不确定，请向友好的系统管理员寻求建议。
 > {: .solution}
 {: .challenge}
 
-If you experience performance issues with a login node you should report it to
-the system staff (usually via the helpdesk) for them to investigate.
+如果您遇到登录节点的性能问题，您应该将其报告给系统作业人员（通常通过帮助台），以便他们进行调查。
 
-## Test Before Scaling
+## 更改节点配置前测试
 
-Remember that you are generally charged for usage on shared systems. A simple
-mistake in a job script can end up costing a large amount of resource budget.
-Imagine a job script with a mistake that makes it sit doing nothing for 24
-hours on 1000 cores or one where you have requested 2000 cores by mistake and
-only use 100 of them! This problem can be compounded when people write scripts
-that automate job submission (for example, when running the same calculation or
-analysis over lots of different parameters or files). When this happens it
-hurts both you (as you waste lots of charged resource) and other users (who are
-blocked from accessing the idle compute nodes).
+请记住，您通常需要为共享系统的使用付费。作业脚本中的一个简单错误最终可能会花费大量资源预算。想象一个作业脚本有一个错误，导致它在1000个内核上24小时无所事事，或者您错误地请求了2000个内核但只使用了其中的100个！当人们编写自动提交作业的脚本时（例如，对许多不同的参数或文件运行相同的计算或分析时），这个问题可能会更加复杂。当这种情况发生时，它会伤害你（因为你浪费了大量的收费资源）和其他用户（他们被阻止访问空闲的计算节点）。
 
-On very busy resources you may wait many days in a queue for your job to fail
-within 10 seconds of starting due to a trivial typo in the job script. This is
-extremely frustrating! Most systems provide dedicated resources for testing
-that have short wait times to help you avoid this issue.
+在非常繁忙的资源上，由于作业脚本中的小错误，您可能会在队列中等待很多天，即使您的作业在开始后10秒内失败。这非常令人沮丧！大多数系统都提供专用的测试资源，等待时间短，以帮助您避免此问题。
 
-> ## Test Job Submission Scripts That Use Large Amounts of Resources
+> ## 测试使用大量资源的作业提交脚本
 >
-> Before submitting a large run of jobs, submit one as a test first to make
-> sure everything works as expected.
+> 在提交大量作业之前，请先提交一个作为测试，以确保一切按预期作业。
 >
-> Before submitting a very large or very long job submit a short truncated test
-> to ensure that the job starts as expected.
+> 在提交非常大或非常长的作业之前，请提交一个简短的截断测试，以确保作业按预期开始。
 {: .callout}
 
-## Have a Backup Plan
+## 有一个数据备份计划
 
-Although many HPC systems keep backups, it does not always cover all the file
-systems available and may only be for disaster recovery purposes (i.e. for
-restoring the whole file system if lost rather than an individual file or
-directory you have deleted by mistake). Protecting critical data from
-corruption or deletion is primarily your responsibility: keep your own backup
-copies.
+尽管许多HPC系统会保留备份，但它并不总是涵盖所有可用的文件系统，并且可能仅用于灾难恢复目的（即，如果丢失，则用于恢复整个文件系统，而不是您错误删除的单个文件或目录）。保护关键数据免遭损坏或删除主要是您的责任：保留您自己的备份副本。
 
-Version control systems (such as Git) often have free, cloud-based offerings
-(e.g., GitHub and GitLab) that are generally used for storing source code. Even
-if you are not writing your own programs, these can be very useful for storing
-job scripts, analysis scripts and small input files.
+版本控制系统（例如 Git）通常具有免费的、基于云的产品（例如 GitHub 和 GitLab），这些产品通常用于存储源代码。即使您没有编写自己的程序，这些对于存储作业脚本、分析脚本和小型输入文件也非常有用。
 
-For larger amounts of data, you should make sure you have a robust system in
-place for taking copies of critical data off the HPC system wherever possible
-to backed-up storage. Tools such as `rsync` can be very useful for this.
+对于大量数据，您应该确保拥有一个强大的系统，以便尽可能将关键数据的副本从HP 系统中复制到备份存储中。`rsync`之类的工具对此非常有用。
 
-Your access to the shared HPC system will generally be time-limited so you
-should ensure you have a plan for transferring your data off the system before
-your access finishes. The time required to transfer large amounts of data
-should not be underestimated and you should ensure you have planned for this
-early enough (ideally, before you even start using the system for your
-research).
+您对共享HPC系统的访问通常是有时间限制的，因此您应该确保在访问完成之前有计划将您的数据从系统中转移出去。不应低估传输大量数据所需的时间，并且您应该确保您已经做好了足够早的计划（理想情况下，甚至在您开始使用该系统进行研究之前）。
 
-In all these cases, the helpdesk of the system you are using should be able to
-provide useful guidance on your options for data transfer for the volumes of
-data you will be using.
+在所有这些情况下，您使用的系统的帮助应该能够为您将使用的大量数据的数据传输选项提供有用的指导。
 
-> ## Your Data Is Your Responsibility
+> ## 你的数据是你的责任
 >
-> Make sure you understand what the backup policy is on the file systems on the
-> system you are using and what implications this has for your work if you lose
-> your data on the system. Plan your backups of critical data and how you will
-> transfer data off the system throughout the project.
+> 确保您了解正在使用的系统上的文件系统上的备份策略是什么，以及如果您丢失系统上的数据，这对您的作业有什么影响。计划关键数据的备份以及在整个项目中如何将数据从系统中传输出去。
 {: .callout}
 
-## Transferring Data
+## 传输数据
 
-As mentioned above, many users run into the challenge of transferring large
-amounts of data off HPC systems at some point (this is more often in
-transferring data off than onto systems but the advice below applies in either
-case). Data transfer speed may be limited by many different factors so the best
-data transfer mechanism to use depends on the type of data being transferred
-and where the data is going. 
+如上所述，许多用户在某些时候遇到了将大量数据从HPC系统传输出去的挑战（这种情况更常见于将数据传输出去而不是传输到系统上，但以下建议适用于任何一种情况）。数据传输速度可能会受到许多不同因素的限制，因此使用的最佳数据传输机制取决于正在传输的数据类型和数据的去向。
 
-The components between your data's source and destination have 
-varying levels of performance, and in particular, may have 
-different capabilities with respect to **bandwidth** and **latency**.
+数据源和目标之间的组件具有不同级别的性能，特别是在**带宽**和**延迟**方面可能具有不同的功能。
 
-**Bandwidth** is generally the raw amount of data per unit time a
-device is capable of transmitting or receiving. It's a common
-and generally well-understood metric.
+**带宽**通常是设备能够传输或接收的每单位时间的原始数据量。这是一个常见且普遍易于理解的指标。
 
-**Latency** is a bit more subtle. For data transfers, it may be thought
-of as the amount of time it takes to get data out of storage and into
-a transmittable form. Latency issues are the reason it's advisable
-to execute data transfers by moving a small number of large 
-files, rather than the converse.
+**延迟**有点微妙。对于数据传输，可以将其视为将数据从存储中取出并转换为可传输形式所需的时间。延迟问题建议通过移动少量大文件而不是相反来执行数据传输的原因。
 
-Some of the key components and their associated issues are:
+一些关键组件及其相关问题是：
 
-- **Disk speed**: File systems on HPC systems are often highly parallel,
-  consisting of a very large number of high performance disk drives. This
-  allows them to support a very high data bandwidth. Unless the remote system
-  has a similar parallel file system you may find your transfer speed limited
-  by disk performance at that end.
-- **Meta-data performance**: *Meta-data operations* such as opening and closing
-  files or listing the owner or size of a file are much less parallel than
-  read/write operations. If your data consists of a very large number of small
-  files you may find your transfer speed is limited by meta-data operations.
-  Meta-data operations performed by other users of the system can also interact
-  strongly with those you perform so reducing the number of such operations you
-  use (by combining multiple files into a single file) may reduce variability
-  in your transfer rates and increase transfer speeds.
-- **Network speed**: Data transfer performance can be limited by network speed.
-  More importantly it is limited by the slowest section of the network between
-  source and destination. If you are transferring to your laptop/workstation,
-  this is likely to be its connection (either via LAN or WiFi).
-- **Firewall speed**: Most modern networks are protected by some form of
-  firewall that filters out malicious traffic. This filtering has some overhead
-  and can result in a reduction in data transfer performance. The needs of a
-  general purpose network that hosts email/web-servers and desktop machines are
-  quite different from a research network that needs to support high volume
-  data transfers. If you are trying to transfer data to or from a host on a
-  general purpose network you may find the firewall for that network will limit
-  the transfer rate you can achieve.
+- **磁盘速度**：HPC系统上的文件系统通常是高度并行的，由大量高性能磁盘驱动器组成。这使它们能够支持非常高的数据带宽。除非远程系统具有类似的并行文件系统，否则您可能会发现传输速度最终受到磁盘性能的限制。
+- **元数据性能**：*元数据操作*（例如打开和关闭文件或列出文件的所有者或大小）的并行性远低于读/写操作。如果您的数据包含大量小文件，您可能会发现传输速度受到元数据操作的限制。系统的其他用户执行的元数据操作也可以与您执行的操作进行强烈交互，因此减少您使用的此类操作的数量（通过将多个文件合并到一个文件中）可以减少传输速率的可变性并提高传输速度。
+- **网络速度**：数据传输性能可能会受到网络速度的限制。更重要的是，它受到源和目标之间网络最慢部分的限制。如果您正在转移到您的笔记本电脑/作业站，这很可能是它的连接（通过 LAN 或 WiFi）。
+- **防火墙速度**：大多数现代网络都受到某种形式的防火墙保护，可以过滤掉恶意流量。这种过滤有一些开销，可能会导致数据传输性能下降。托管电子邮件/网络服务器和台式机的通用网络的需求与需要支持大量数据传输的研究网络的需求完全不同。如果您尝试将数据传输到通用网络上的主机或从主机传输数据，您可能会发现该网络的防火墙会限制您可以实现的传输速率。
 
-As mentioned above, if you have related data that consists of a large number of
-small files it is strongly recommended to pack the files into a larger
-*archive* file for long term storage and transfer. A single large file makes
-more efficient use of the file system and is easier to move, copy and transfer
-because significantly fewer metadata operations are required. Archive files can
-be created using tools like `tar` and `zip`. We have already met `tar` when we
-talked about data transfer earlier.
+如上所述，如果您有包含大量小文件的相关数据，强烈建议将这些文件打包成一个较大的*archive*文件，以便长期存储和传输。单个大文件可以更有效地利用文件系统，并且更容易移动、复制和传输，因为所需的元数据操作要少得多。归档文件可以使用`tar`和`zip`等工具创建。当我们之前谈到数据传输时，我们已经遇到了`tar`。
 
 {% include figure.html url="" max-width="90%"
-   file="/fig/responsibility-bandwidth.svg"
+   file="/hpc1/fig/responsibility-bandwidth.svg"
    alt="Schematic of network bandwidth"
    caption="<i>Schematic diagram of bandwidth and latency for disk and network
    I/O. Each of the components on the figure is connected by a blue line of
@@ -225,16 +116,11 @@ talked about data transfer earlier.
    link points illustrate the latency of the link, with more tortuous
    mazes indicating higher latency.</i>" %}
 
-> ## Consider the Best Way to Transfer Data
+> ## 考虑传输数据的最佳方式
 >
-> If you are transferring large amounts of data you will need to think about
-> what may affect your transfer performance. It is always useful to run some
-> tests that you can use to extrapolate how long it will take to transfer your
-> data.
+> 如果您要传输大量数据，则需要考虑可能会影响传输性能的因素。运行一些测试总是很有用的，您可以使用这些测试来推断传输数据需要多长时间。
 >
-> Say you have a "data" folder containing 10,000 or so files, a healthy mix of
-> small and large ASCII and binary data. Which of the following would be the
-> best way to transfer them to {{ site.remote.name }}?
+> 假设您有一个“数据”文件夹，其中包含大约10,000个文件，是大小ASCII和二进制数据的健康组合。以下哪项是将它们转移到 {{ site.remote.name }} 的最佳方式？
 >
 > 1. ```
 >    {{ site.local.prompt }} scp -r data {{ site.remote.user }}@{{ site.remote.login }}:~/
@@ -259,22 +145,12 @@ talked about data transfer earlier.
 >    ```
 >    {: .language-bash}
 >
-> > ## Solution
+> > ## 解决方案
 > >
-> > 1. `scp` will recursively copy the directory. This works, but without
-> >    compression.
-> > 2. `rsync -ra` works like `scp -r`, but preserves file information like
-> >    creation times. This is marginally better.
-> > 3. `rsync -raz` adds compression, which will save some bandwidth. If you
-> >    have a strong CPU at both ends of the line, and you're on a slow
-> >    network, this is a good choice.
-> > 4. This command first uses `tar` to merge everything into a single file,
-> >    then `rsync -z` to transfer it with compression. With this large
-> >    *number* of files, metadata overhead can hamper your transfer, so this
-> >    is a good idea.
-> > 5. This command uses `tar -z` to compress the archive, then `rsync` to
-> >    transfer it. This may perform similarly to #4, but in most cases (for
-> >    large datasets), it's the best combination of high throughput and low
-> >    latency (making the most of your time and network connection).
+> > 1. `scp`将递归地复制目录。这有效，但没有压缩。
+> > 2. `rsync -ra`的作业方式类似于`scp -r`，但会保留文件信息，例如创建时间。这稍微好一点。
+> > 3. `rsync -raz`添加压缩，这将节省一些带宽。如果您在线路两端都有强大的CPU，并且您的网络速度较慢，那么这是一个不错的选择。
+> > 4. 该命令首先使用`tar`将所有内容合并到一个文件中，然后使用 `rsync -z`以压缩方式传输它。有了这么多*数量*的文件，元数据开销可能会妨碍您的传输，所以这是一个好主意。
+> > 5. 此命令使用`tar -z`压缩存档，然后使用`rsync`传输它。这可能与#4类似，但在大多数情况下（对于大型数据集），它是高吞吐量和低延迟的最佳组合（充分利用您的时间和网络连接）。
 > {: .solution}
 {: .challenge}
